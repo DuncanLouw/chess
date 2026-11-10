@@ -1,0 +1,247 @@
+[gd_scene format=3 uid="uid://c5mhyjt5cdm0g"]
+
+[ext_resource type="Script" uid="uid://de3jpss66xjfh" path="res://addons/curved_lines_2d/scalable_vector_shape_2d.gd" id="1_e1sdi"]
+[ext_resource type="Script" uid="uid://catrdx04yhrba" path="res://scripts/piece.gd" id="1_n7ewe"]
+[ext_resource type="Script" uid="uid://c3p3fhbo34ahd" path="res://addons/curved_lines_2d/synced_svg_root.gd" id="1_p6abh"]
+[ext_resource type="Script" uid="uid://dlbv4pit17dnu" path="res://addons/curved_lines_2d/scalable_arc.gd" id="2_p6abh"]
+[ext_resource type="Script" uid="uid://dl1t88tthmwts" path="res://addons/curved_lines_2d/scalable_arc_list.gd" id="3_yonda"]
+
+[sub_resource type="Curve2D" id="Curve2D_yonda"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -9.336439, -1.1370773, 0, 0, 0, 0, 9.336439, -1.1370773, 0, 0, 0, 0, 9.336439, 1.1370773, 0, 0, 0, 0, -9.336439, 1.1370773, 0, 0, 0, 0, -9.336439, -1.1370773)
+}
+point_count = 5
+
+[sub_resource type="Resource" id="Resource_erqj1"]
+resource_local_to_scene = true
+script = ExtResource("3_yonda")
+
+[sub_resource type="Curve2D" id="Curve2D_epwpl"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -6.516487, -1.5464252, 0, 0, 0, 0, 6.516487, -1.5464252, 0, 0, 0, 0, 6.516487, 1.5464252, 0, 0, 0, 0, -6.516487, 1.5464252, 0, 0, 0, 0, -6.516487, -1.5464252)
+}
+point_count = 5
+
+[sub_resource type="Resource" id="Resource_f7xt0"]
+resource_local_to_scene = true
+script = ExtResource("3_yonda")
+
+[sub_resource type="Curve2D" id="Curve2D_hoydo"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -5.3794093, -4.860111, 0, 0, 0, 0, 5.3794093, -4.860111, 0, 0, 0, 0, 5.3794093, 4.860111, 0, 0, 0, 0, -5.3794093, 4.860111, 0, 0, 0, 0, -5.3794093, -4.860111)
+}
+point_count = 5
+
+[sub_resource type="Resource" id="Resource_mofyi"]
+resource_local_to_scene = true
+script = ExtResource("3_yonda")
+
+[sub_resource type="Curve2D" id="Curve2D_6opu7"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -6.516486, 1.34795, 0, 0, 0, 0, -5.379408, -1.34795, 0, 0, 0, 0, 5.37941, -1.34795, 0, 0, 0, 0, 6.516487, 1.3479481, 0, 0, 0, 0, -6.516486, 1.34795)
+}
+point_count = 5
+
+[sub_resource type="Resource" id="Resource_ja0ie"]
+resource_local_to_scene = true
+script = ExtResource("3_yonda")
+
+[sub_resource type="Curve2D" id="Curve2D_k636y"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -7.3412485, -2.4462597, 0, 0, 0, 0, -7.3412485, 0.8153753, 0, 0, 0, 0, -7.3412485, 2.4462597, 0, 0, 0, 0, 7.3412495, 2.4462597, 0, 0, 0, 0, 7.3412495, 0.8153753, 0, 0, 0, 0, 7.3412495, -0.8154423, 0, 0, 0, 0, 7.3412495, -2.4462597, 0, 0, 0, 0, 4.8327065, -2.4462597, 0, 0, 0, 0, 4.8327065, -0.8154423, 0, 0, 0, 0, 1.8493023, -0.8154423, 0, 0, 0, 0, 1.8493023, -2.4462597, 0, 0, 0, 0, -1.8492346, -2.4462597, 0, 0, 0, 0, -1.8492346, -0.8154423, 0, 0, 0, 0, -4.832638, -0.8154423, 0, 0, 0, 0, -4.832638, -2.4462597, 0, 0, 0, 0, -7.3412485, -2.4462597)
+}
+point_count = 16
+
+[sub_resource type="Resource" id="Resource_bhrto"]
+resource_local_to_scene = true
+script = ExtResource("3_yonda")
+
+[sub_resource type="Curve2D" id="Curve2D_cpxwq"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -7.341248, -1.3479543, 0, 0, 0, 0, -5.379408, 1.3479543, 0, 0, 0, 0, 5.37941, 1.3479543, 0, 0, 0, 0, 7.3412495, -1.3479543, 0, 0, 0, 0, -7.341248, -1.3479543)
+}
+point_count = 5
+
+[sub_resource type="Resource" id="Resource_av2la"]
+resource_local_to_scene = true
+script = ExtResource("3_yonda")
+
+[node name="Bishop" type="Node2D" unique_id=829617531]
+script = ExtResource("1_n7ewe")
+
+[node name="SyncedSVGRoot" type="Node2D" parent="." unique_id=1993351045]
+position = Vector2(-50, -50)
+script = ExtResource("1_p6abh")
+svg_resource_path = "res://sprites/pieces/bishop.svg"
+metadata/_checksum = "142d5a3741cd2afdb9049dcd1c6cb76a"
+
+[node name="Bishop" type="Node2D" parent="SyncedSVGRoot" unique_id=789787491]
+scale = Vector2(3.7795277, 3.7795277)
+metadata/svg_root = true
+
+[node name="layer1" type="Node2D" parent="SyncedSVGRoot/Bishop" unique_id=564856833]
+position = Vector2(13.229167, 13.229165)
+metadata/svg_style = {}
+metadata/is_svg_group = true
+
+[node name="rect2" type="Node2D" parent="SyncedSVGRoot/Bishop/layer1" unique_id=1688389576 node_paths=PackedStringArray("polygon", "line")]
+position = Vector2(0, 11.548701)
+script = ExtResource("1_e1sdi")
+polygon = NodePath("Fill")
+stroke_color = Color(0, 0, 0, 1)
+stroke_width = 1.08677
+line_joint_mode = 2
+line = NodePath("Stroke")
+curve = SubResource("Curve2D_yonda")
+update_curve_at_runtime = true
+arc_list = SubResource("Resource_erqj1")
+shape_type = 1
+size = Vector2(18.672878, 2.2741547)
+
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Bishop/layer1/rect2" unique_id=1741874250]
+polygon = PackedVector2Array(-9.336439, -1.1370773, 9.336439, -1.1370773, 9.336439, 1.1370773, -9.336439, 1.1370773)
+metadata/_edit_lock_ = true
+
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Bishop/layer1/rect2" unique_id=1198100879]
+points = PackedVector2Array(-9.336439, -1.1370773, 9.336439, -1.1370773, 9.336439, 1.1370773, -9.336439, 1.1370773)
+closed = true
+width = 1.08677
+default_color = Color(0, 0, 0, 1)
+joint_mode = 2
+sharp_limit = 4.0
+metadata/_edit_lock_ = true
+
+[node name="rect3" type="Node2D" parent="SyncedSVGRoot/Bishop/layer1" unique_id=940549298 node_paths=PackedStringArray("polygon", "line")]
+position = Vector2(-1.9073486e-06, 8.865201)
+script = ExtResource("1_e1sdi")
+polygon = NodePath("Fill")
+stroke_color = Color(0, 0, 0, 1)
+stroke_width = 1.08677
+line_joint_mode = 2
+line = NodePath("Stroke")
+curve = SubResource("Curve2D_epwpl")
+update_curve_at_runtime = true
+arc_list = SubResource("Resource_f7xt0")
+shape_type = 1
+size = Vector2(13.032974, 3.0928504)
+
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Bishop/layer1/rect3" unique_id=384268329]
+polygon = PackedVector2Array(-6.516487, -1.5464252, 6.516487, -1.5464252, 6.516487, 1.5464252, -6.516487, 1.5464252)
+metadata/_edit_lock_ = true
+
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Bishop/layer1/rect3" unique_id=2122979290]
+points = PackedVector2Array(-6.516487, -1.5464252, 6.516487, -1.5464252, 6.516487, 1.5464252, -6.516487, 1.5464252)
+closed = true
+width = 1.08677
+default_color = Color(0, 0, 0, 1)
+joint_mode = 2
+sharp_limit = 4.0
+metadata/_edit_lock_ = true
+
+[node name="rect4" type="Node2D" parent="SyncedSVGRoot/Bishop/layer1" unique_id=857243239 node_paths=PackedStringArray("polygon", "line")]
+position = Vector2(0, -0.23724174)
+script = ExtResource("1_e1sdi")
+polygon = NodePath("Fill")
+stroke_color = Color(0, 0, 0, 1)
+stroke_width = 1.08677
+line_joint_mode = 2
+line = NodePath("Stroke")
+curve = SubResource("Curve2D_hoydo")
+update_curve_at_runtime = true
+arc_list = SubResource("Resource_mofyi")
+shape_type = 1
+size = Vector2(10.758819, 9.720222)
+
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Bishop/layer1/rect4" unique_id=1998353066]
+polygon = PackedVector2Array(-5.3794093, -4.860111, 5.3794093, -4.860111, 5.3794093, 4.860111, -5.3794093, 4.860111)
+metadata/_edit_lock_ = true
+
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Bishop/layer1/rect4" unique_id=18768326]
+points = PackedVector2Array(-5.3794093, -4.860111, 5.3794093, -4.860111, 5.3794093, 4.860111, -5.3794093, 4.860111)
+closed = true
+width = 1.08677
+default_color = Color(0, 0, 0, 1)
+joint_mode = 2
+sharp_limit = 4.0
+metadata/_edit_lock_ = true
+
+[node name="path4" type="Node2D" parent="SyncedSVGRoot/Bishop/layer1" unique_id=713827165 node_paths=PackedStringArray("polygon", "line")]
+position = Vector2(-1.9073486e-06, 5.9708204)
+script = ExtResource("1_e1sdi")
+polygon = NodePath("Fill")
+stroke_color = Color(0, 0, 0, 1)
+stroke_width = 1.08677
+line_joint_mode = 2
+line = NodePath("Stroke")
+curve = SubResource("Curve2D_6opu7")
+update_curve_at_runtime = true
+arc_list = SubResource("Resource_ja0ie")
+
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Bishop/layer1/path4" unique_id=175960246]
+polygon = PackedVector2Array(-6.516486, 1.34795, -5.379408, -1.34795, 5.37941, -1.34795, 6.516487, 1.3479481)
+metadata/_edit_lock_ = true
+
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Bishop/layer1/path4" unique_id=1826907956]
+points = PackedVector2Array(-6.516486, 1.34795, -5.379408, -1.34795, 5.37941, -1.34795, 6.516487, 1.3479481)
+closed = true
+width = 1.08677
+default_color = Color(0, 0, 0, 1)
+joint_mode = 2
+sharp_limit = 4.0
+metadata/_edit_lock_ = true
+
+[node name="rect5" type="Node2D" parent="SyncedSVGRoot/Bishop/layer1" unique_id=342059950 node_paths=PackedStringArray("polygon", "line")]
+position = Vector2(-1.9073486e-06, -10.23952)
+script = ExtResource("1_e1sdi")
+polygon = NodePath("Fill")
+stroke_color = Color(0, 0, 0, 1)
+stroke_width = 1.08677
+line_joint_mode = 2
+line = NodePath("Stroke")
+curve = SubResource("Curve2D_k636y")
+update_curve_at_runtime = true
+arc_list = SubResource("Resource_bhrto")
+
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Bishop/layer1/rect5" unique_id=1528924709]
+polygon = PackedVector2Array(-7.3412485, -2.4462597, -7.3412485, 0.8153753, -7.3412485, 2.4462597, 7.3412495, 2.4462597, 7.3412495, 0.8153753, 7.3412495, -0.8154423, 7.3412495, -2.4462597, 4.8327065, -2.4462597, 4.8327065, -0.8154423, 1.8493023, -0.8154423, 1.8493023, -2.4462597, -1.8492346, -2.4462597, -1.8492346, -0.8154423, -4.832638, -0.8154423, -4.832638, -2.4462597)
+metadata/_edit_lock_ = true
+
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Bishop/layer1/rect5" unique_id=1031530552]
+points = PackedVector2Array(-7.3412485, -2.4462597, -7.3412485, 0.8153753, -7.3412485, 2.4462597, 7.3412495, 2.4462597, 7.3412495, 0.8153753, 7.3412495, -0.8154423, 7.3412495, -2.4462597, 4.8327065, -2.4462597, 4.8327065, -0.8154423, 1.8493023, -0.8154423, 1.8493023, -2.4462597, -1.8492346, -2.4462597, -1.8492346, -0.8154423, -4.832638, -0.8154423, -4.832638, -2.4462597)
+closed = true
+width = 1.08677
+default_color = Color(0, 0, 0, 1)
+joint_mode = 2
+sharp_limit = 4.0
+metadata/_edit_lock_ = true
+
+[node name="path8" type="Node2D" parent="SyncedSVGRoot/Bishop/layer1" unique_id=55992817 node_paths=PackedStringArray("polygon", "line")]
+position = Vector2(-1.9073486e-06, -6.4453063)
+script = ExtResource("1_e1sdi")
+polygon = NodePath("Fill")
+stroke_color = Color(0, 0, 0, 1)
+stroke_width = 1.08677
+line_joint_mode = 2
+line = NodePath("Stroke")
+curve = SubResource("Curve2D_cpxwq")
+update_curve_at_runtime = true
+arc_list = SubResource("Resource_av2la")
+
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Bishop/layer1/path8" unique_id=1586837411]
+polygon = PackedVector2Array(-7.341248, -1.3479543, -5.379408, 1.3479543, 5.37941, 1.3479543, 7.3412495, -1.3479543)
+metadata/_edit_lock_ = true
+
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Bishop/layer1/path8" unique_id=1038285018]
+points = PackedVector2Array(-7.341248, -1.3479543, -5.379408, 1.3479543, 5.37941, 1.3479543, 7.3412495, -1.3479543)
+closed = true
+width = 1.08677
+default_color = Color(0, 0, 0, 1)
+joint_mode = 2
+sharp_limit = 4.0
+metadata/_edit_lock_ = true

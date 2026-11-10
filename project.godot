@@ -1,0 +1,53 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[addons]
+
+curved_lines_2d/rect_create_as_path=false
+curved_lines_2d/close_pencil_path=false
+curved_lines_2d/fill_color=Color(1, 1, 1, 1)
+curved_lines_2d/stroke_color=Color(0, 0, 0, 1)
+curved_lines_2d/stroke_width=1.08677
+curved_lines_2d/add_fill_enabled=true
+curved_lines_2d/add_stroke_enabled=true
+curved_lines_2d/use_line_2d_for_stroke=true
+curved_lines_2d/hints_enabled=false
+curved_lines_2d/show_point_numbers=false
+curved_lines_2d/editing_enabled=false
+
+[application]
+
+config/name="Chess"
+run/main_scene="uid://b57qqm1eu4yv2"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/curved_lines_2d/plugin.cfg")
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

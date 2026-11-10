@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ChessVariant" format=3 uid="uid://5qqr61j3ebnd"]
+
+[ext_resource type="Script" uid="uid://bgn2fcmklrhot" path="res://scripts/chess_variant.gd" id="1_pf6om"]
+[ext_resource type="Script" uid="uid://ba1upaondn2ys" path="res://scripts/side.gd" id="2_r6gxu"]
+
+[sub_resource type="Resource" id="Resource_qo8n1"]
+script = ExtResource("2_r6gxu")
+metadata/_custom_type_script = "uid://ba1upaondn2ys"
+
+[sub_resource type="Resource" id="Resource_4ibx0"]
+script = ExtResource("2_r6gxu")
+letter = "b"
+forward = Vector2i(0, 1)
+fill_color = Color(0, 0, 0, 1)
+outline_color = Color(1, 1, 1, 1)
+metadata/_custom_type_script = "uid://ba1upaondn2ys"
+
+[resource]
+script = ExtResource("1_pf6om")
+sides = Array[ExtResource("2_r6gxu")]([SubResource("Resource_qo8n1"), SubResource("Resource_4ibx0")])
+layout = "bR bN bB bQ bK bB bN bR
+bP bP bP bP bP bP bP bP
+.. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. ..
+wP wP wP wP wP wP wP wP
+wR wN wB wQ wK wB wN wR"
+metadata/_custom_type_script = "uid://bgn2fcmklrhot"

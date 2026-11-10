@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b57qqm1eu4yv2"]
+
+[ext_resource type="Script" uid="uid://bav1oo4w5ctna" path="res://scripts/main.gd" id="1_1bvp3"]
+[ext_resource type="Resource" uid="uid://5qqr61j3ebnd" path="res://variants/standard.tres" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://btnodjnev3puf" path="res://scripts/board.gd" id="2_lquwl"]
+
+[node name="Main" type="Node2D" unique_id=216439506]
+script = ExtResource("1_1bvp3")
+variant = ExtResource("2_h2yge")
+
+[node name="Board" type="Node2D" parent="." unique_id=9588321]
+script = ExtResource("2_lquwl")
+
+[node name="Pieces" type="Node2D" parent="Board" unique_id=343556842]
