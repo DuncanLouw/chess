@@ -75,7 +75,7 @@ Godot's official style, so my code looks like the docs, tutorials and add-ons.
 - Inkscape page: **100 × 100 px**, which is exactly one board square.
 - **Fit the piece to the page *without* its outline**, centred, then add the 1 mm outline. The outline then sticks out about 2 px past the page edge. That's expected: browsers cut it off, but Godot imports it. (Fitting first is easier because with scale stroke width off, Inkscape only corrects the outline *after* scaling, so snapping grabs the wrong spot while you drag.)
 - **No margin in the SVG.** The gap between the piece and the edge of its square comes from `piece_scale` in the game (see [The piece scene](#the-piece-scene-scenespiecespiecetscn)).
-- Use only two colours: **white fill `#ffffff`** and **black outline `#000000`**. The game recolours them per side, so one file works for every side.
+- Colours: **white `#ffffff`** becomes the side's fill colour, **black `#000000`** becomes the side's outline colour, and **greys** become a mix of the two. One file works for every side. Details like the bishop's cross can simply be **black filled shapes**; no outline tricks needed.
 - Save as `sprites/pieces/<piece>.svg` (lowercase).
 - **Use the same outline width on every piece** so the set looks consistent (the pawn uses 1 mm). Inkscape sometimes changes outline widths by itself when shapes are resized, converted or edited, so:
   - turn off **scale stroke width**: the toggle on the Select tool's toolbar, or Edit → Preferences → Behavior → Transforms → Scale stroke width
@@ -101,7 +101,7 @@ Rook                 (Node2D, script: scripts/piece.gd)  ← placed at the centr
 | --------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Automatic Synchronization with SyncedSVGRoot  | **on**      | keeps the scene in sync with the .svg file                                                                                                                                     |
 | Import as ScalableVectorShape2D               | **on**      | each shape gets the plugin's own node, which remembers the curves so they can be edited or animated in Godot. The plugin advises keeping it on (off prints errors)             |
-| Use Line2D for Strokes                        | **on**      | outlines become `Line2D` nodes. **`piece.gd` relies on this:** Polygon2D = fill, Line2D = outline. With it off, outlines would be Polygon2D too and get the fill colour |
+| Use Line2D for Strokes                        | **on**      | outlines become `Line2D` nodes, which keep their width when scaled. (Colouring no longer depends on this: it goes by each shape's colour.) |
 | Flag on antialiased for Polygon2D and Line2D  | your choice | smooth edges, see [Antialiasing](#antialiasing-smooth-edges) below                                                                                                             |
 
 - The SyncedSVGRoot position of (-50, -50) moves the page's centre onto the scene's origin, so a piece placed at a square's centre sits in the middle of it.
@@ -116,7 +116,7 @@ Rook                 (Node2D, script: scripts/piece.gd)  ← placed at the centr
 
 ### Colours
 
-Each side has a fill colour and an outline colour (set in the variant). `piece.gd` sets every `Polygon2D` to the fill colour and every `Line2D` to the outline colour. This only works because strokes are imported as Line2D (see the import settings above).
+Each side has a fill colour and an outline colour (set in the variant). `piece.gd` recolours every `Polygon2D` and `Line2D` by its **original brightness** in the SVG: white (1) → fill colour, black (0) → outline colour, grey → a mix (`outline.lerp(fill, brightness)`). The original brightness is stored on each node with `set_meta`, so recolouring the same piece again still works.
 
 ### Antialiasing (smooth edges)
 
@@ -302,10 +302,14 @@ Things that tripped me up, so I don't repeat them.
 - **Code that does something has to be inside a function.** Outside functions, a script can only declare things (`var`, `const`, `@export`, `func`).
 - **Scripts that `extends Resource` are data files** (like a form with blanks). They don't run by themselves, so `_ready()` and `$Node` don't work in them. Only scripts on nodes can do that.
 - **Make silent failures loud.** When a lookup finds nothing (no matching side, unknown piece letter), call `push_error(...)` instead of quietly carrying on. Otherwise the bug only shows up as "something looks wrong".
+- **`push_error` does not stop the game.** It prints a red message (Debugger → Errors) and the game carries on. `assert(condition, "message")` pauses the game at that line, but only when running from the editor: asserts are skipped completely in exported games. For loading data (layouts, variants), functions return `true`/`false` and the game refuses to start when loading failed. That also works in exported games and later for player-made variants. Report *all* mistakes in one go rather than stopping at the first.
+- **GDScript has no named arguments** (no `f(x = 1)` like Python). Get the same safety from types: when every parameter has a different type, a mix-up is a red error before the game runs. Two `int`s side by side can be swapped unnoticed, which is one reason squares are always one `Vector2i`.
 - **Folder and file names must match the paths in code exactly** (`scene/` vs `scenes/` broke loading once).
 - `Variant` is a built-in Godot type, so it can't be used as a `class_name` (that's why it's `ChessVariant`).
 - `"%s" % value` fills `value` into the `%s` blank in the text. Only needed when the text has a blank.
 - New piece scenes come out white with a black outline until `set_colors` runs. If every piece looks white, `set_colors` probably never ran.
+- `set_meta(name, value)` / `get_meta(name)` attach your own extra values to any node (used to remember each shape's original brightness).
+- **Commits:** start with a verb (Add, Fix, Move, Rename, Remove, Update, Draw), keep the summary around 50 characters, one change per commit. Untick files in GitHub Desktop to split art and code into separate commits.
 - Code after a `return` never runs (for example a `break` right after `return`).
 - A function with a return type (`-> Side`) must return something on every path, so add `return null` at the end when nothing was found.
 - Report an error in the function that does the lookup (`find_side`), not in every place that calls it. Callers just check for `null` and stop.
@@ -342,6 +346,10 @@ Things that tripped me up, so I don't repeat them.
 - **Board drawn in code** (`_draw`), not an image: the colours are settings, the board can be any size, and highlights use the same code.
 - **Pieces as vector nodes** through the plugin, so they stay sharp at any zoom. Fallback: Sprite2D + the shader below.
 - **One SVG per piece type.** Each side's colours are applied in the game.
+- **Error handling: is the mistake in the data or in the code?**
+  - *Data* (layouts, variant files, later maybe made by players): `push_error` + return `false`, and that game doesn't start. Only the broken game stops, never the app. Loading reports every mistake in one go.
+  - *Code* (things that can't happen if the code is right): `assert(condition, "message")`. It pauses at the line while developing and is removed from exported games.
+  - *Later, with menus:* the menu calls the same loading functions. Loading also collects its messages in a list (e.g. "Row 3: unknown piece letter X"); if loading fails, the menu shows them in a popup and stays open. Menus come after standard chess works.
 - **The board rebuilds its piece nodes from the state after every move** (simple and always in sync). Animations later: slide the moved piece, then sync the rest.
 - **The SVG page and the board square are both 100 × 100.** Pieces fill the page (outline slightly past it); the gap to the square's edge is set in code with `piece_scale`, so it can become a game setting.
 - **Plugin import keeps "Import as ScalableVectorShape2D" on**, as the plugin advises. (An earlier version of this guide said off, which was wrong.)

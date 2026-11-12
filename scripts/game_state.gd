@@ -13,50 +13,38 @@ var turn := 0
 # Fills `squares` from the variant's layout text
 func load_layout(variant: ChessVariant) -> void:
 	squares.clear()
-	# YOUR TURN: see below
+	var rows: Array = variant.layout.strip_edges().split("\n", false)
+	for row_num in range(len(rows)):
+		var codes: Array = rows[row_num].split(" ", false)
+		for column_num in range(len(codes)):
+			var piece_code: String = codes[column_num]
+			add_one_piece_to_dictionary(variant, piece_code, Vector2i(column_num, row_num))
 
 
 # Returns the index of the side with this letter in variant.sides, or -1 if there's none
 func find_side_index(variant: ChessVariant, letter: String) -> int:
-	# YOUR TURN: see below
-	return -1
+	return variant.sides.find_custom(func(element): return element.letter == letter)
 
 
-#func place_pieces() -> void: 
-	#var rows: Array = variant.layout.strip_edges().split("\n", false)
-	#for row_num in range(len(rows)):
-		#var codes: Array = rows[row_num].split(" ", false)
-		#for column_num in range(len(codes)):
-			#var piece_code: String = codes[column_num]
-			#place_one_piece(piece_code, column_num, row_num)
-#
-#
-#func place_one_piece(piece_code: String, column_num: int, row_num: int) -> void:
-	#if piece_code == "..":
-		#$Board.place_piece_on_board(null)
-		#return
-	#elif piece_code == "xx":
-		#return
-	#
-	#var piece_name: String = variant.piece_names[piece_code[1]]
-	#if piece_name == null:
-		#push_error("No piece with letter '%s'" % piece_code[1])
-		#return
-	#var piece: Piece = load("res://scenes/pieces/%s.tscn" % piece_name).instantiate()
-	#
-	#var side: Side = find_side(piece_code[0])
-	#if side == null: # reduntant with the push error in find_side which should I keep?
-		#push_error("No side with letter '%s'" % piece_code[0])
-		#return
-	#piece.set_colors(side.fill_color, side.outline_color)
-	#
-	#$Board.place_piece_on_board(piece)
-#
-#
-#func find_side(letter) -> Side:
-	#for side in variant.sides:
-		#if letter == side.letter:
-			#return side
-	#push_error("No side with letter '%s'" % letter)
-	#return null # Godot throws an error: Not all code paths return a value.
-	#
+func add_one_piece_to_dictionary(
+	variant: ChessVariant, 
+	piece_code: String, 
+	square: Vector2i
+) -> void:
+	if piece_code == "..":
+		squares[square] = null
+		return
+	elif piece_code == "xx":
+		return
+	
+	var piece_name: String = variant.piece_names.get(piece_code[1], "")
+	if piece_name == "":
+		push_error("No piece with letter '%s'" % piece_code[1])
+		return
+	
+	var side_index: int = find_side_index(variant, piece_code[0])
+	if side_index == -1:
+		push_error("No side with letter '%s'" % piece_code[0])
+		return
+	
+	squares[square] = PieceData.new(piece_name, side_index)
