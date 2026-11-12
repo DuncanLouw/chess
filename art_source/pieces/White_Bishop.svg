@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100"
+   height="100"
+   viewBox="0 0 26.458333 26.458333"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="White_Bishop.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="6.0934343"
+     inkscape:cx="46.361376"
+     inkscape:cy="45.048487"
+     inkscape:window-width="1858"
+     inkscape:window-height="1057"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:3.77952761;paint-order:markers stroke fill;stroke-opacity:1;stroke-dasharray:none"
+       id="path1"
+       cx="47.694103"
+       cy="42.820255"
+       r="14.969682"
+       transform="scale(0.26458333)" />
+    <circle
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:9.97367747;paint-order:markers stroke fill;stroke-opacity:1;stroke-dasharray:none"
+       id="circle1"
+       cx="47.694103"
+       cy="42.820255"
+       r="14.969682"
+       transform="matrix(-0.10026392,0,0,-0.10026392,17.401062,10.161205)" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:3.77953;paint-order:markers stroke fill"
+       id="rect1"
+       width="1.3925285"
+       height="6.2663784"
+       x="75.312584"
+       y="34.349037"
+       transform="matrix(0.26458333,0,0,0.26458333,-7.8907525,0.4605503)" />
+    <rect
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.61381;paint-order:markers stroke fill"
+       id="rect4"
+       width="4.4096775"
+       height="13.461111"
+       x="75.312584"
+       y="34.349037"
+       transform="matrix(0.17754941,0,0,0.26458333,-1.1441081,0.46055013)"
+       ry="2.0017607" />
+    <rect
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.61381;paint-order:markers stroke fill"
+       id="rect5"
+       width="4.4096775"
+       height="13.461111"
+       x="75.312584"
+       y="34.349037"
+       transform="matrix(0,-0.17754941,0.26458333,0,1.7500891,25.092698)"
+       ry="2.0017607" />
+  </g>
+</svg>

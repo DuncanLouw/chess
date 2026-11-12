@@ -13,6 +13,7 @@ A chess game in Godot, built so that **variants** can be made by swapping data a
 |            |                                                                                                                                 |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | Engine     | Godot 4.7 stable, **Compatibility** renderer (runs on low-spec hardware)                                                        |
+| Platforms  | Desktop **and mobile**: everything must work with a mouse and with touch (taps)                                                 |
 | Resolution | 1920 × 1080 viewport, stretch mode `canvas_items` / `expand`. Test window 1280 × 720                                            |
 | Plugin     | Scalable Vector Shapes 2D 3.3.2 (`addons/curved_lines_2d`), for vector piece art                                                |
 | Art        | Inkscape, saved as SVG                                                                                                          |
@@ -142,6 +143,16 @@ Antialiasing softens the "staircase" pixels along diagonal and curved edges. Not
 
 `main.gd` connects them. It loads a variant, builds the GameState from the variant's layout and tells the view to show it.
 
+**Two dictionaries, two jobs:**
+- `GameState.squares` (`Vector2i` → `PieceData`) is the game itself. The rules read and change it, and can copy it to test a move without anything changing on screen.
+- `Board.piece_nodes` (`Vector2i` → `Piece` node) only tracks which node is drawn on which square. It never decides anything.
+
+**How the screen follows the state:**
+- **Now:** after every change, `Board.show_state` deletes all piece nodes and creates them again from the state. The screen can never disagree with the game, and special moves (castling, en passant, promotion, atomic explosions) and future variants need no extra screen code. It costs a few milliseconds per move, which is nothing for a turn-based game. Downside: pieces jump instead of sliding.
+- **Later, for animations:** slide the moved piece's node (the Move says from and to; `piece_nodes` finds the node), then *sync* the rest by comparing `piece_nodes` with the state and adding, removing or swapping whatever doesn't match. Only `board.gd` changes.
+
+**Data objects in Godot:** a `Node` lives in the scene (draws, gets input). A `Resource` is data saved as a file and edited in the Inspector (`ChessVariant`, `Side`). A `RefCounted` is plain data that only exists while the game runs and is deleted automatically when nothing uses it (`GameState`, `PieceData`, later `Move`).
+
 **A move from start to finish:**
 
 1. The player clicks a piece. The view asks `rules.get_legal_moves(state, square)` and highlights those squares.
@@ -244,6 +255,7 @@ Piece letters use standard chess notation: **K** king, **Q** queen, **R** rook, 
 | Variant                                       | What to make                                                                                                                                               |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Fewer pieces / custom setups                  | Duplicate `standard.tres` and edit the layout. **No code.**                                                                                                |
+| Double-move knight (idea): a knight may jump twice in one turn | Override `get_piece_moves` for the knight. |
 | King of the Hill (win by reaching the centre) | Override `get_winner`.                                                                                                                                     |
 | Atomic ("nuke") chess                         | Override `on_capture` (the explosion), `is_move_legal` (you can't blow up your own king) and `get_winner` (a king exploded).                               |
 | 4-player chess                                | A 14 × 14 layout with `xx` corners and 4 sides, each with its own forward direction. Override `get_next_side` (skip players who are out) and `get_winner`. |
@@ -268,9 +280,12 @@ Piece letters use standard chess notation: **K** king, **Q** queen, **R** rook, 
   - `_ready() -> void`, `find_side(letter: String)`, remove the `#Board.position` comment
   - centre the board (Board position 560, 140, in the scene or in code)
 - [ ] Restructure: placing piece nodes moves to `board.gd` (`add_piece`), reading the layout moves to `game_state.gd`. Do this before movement
-- [ ] GameState + Move
-- [ ] Rules: movement, check, castling, en passant, promotion, game end
-- [ ] Input: selecting and moving pieces
+- [ ] **Rules, in build order:**
+  1. GameState: board as a Dictionary (`Vector2i` → piece data, `null` = empty, missing = not on the board), whose turn it is. Layout reading moves out of `main.gd`; the board shows pieces from the state. No visible change.
+  2. Moves for the bishop, rook, queen and king (ignoring check), plus tap/click to select, dots on the legal squares, tap a dot to move
+  3. Knight, then the pawn (forward only, double first move, diagonal capture, en passant): I try these myself
+  4. Check: "is this square attacked by side X?" + throw away moves that leave your own king attacked
+  5. Castling (my turn to try), promotion, checkmate and stalemate
 - [ ] Real art: king, rook and pawn done. Queen in progress (only the crown so far). Bishop and knight are still rook placeholders
 - [x] `piece_scale` (default 0.9) on Board, applied when placing pieces. Later: a player setting
 - [ ] Decide: same height for every piece, or keep relative sizes (see "Piece sizes compared to each other")
@@ -294,6 +309,9 @@ Things that tripped me up, so I don't repeat them.
 - Code after a `return` never runs (for example a `break` right after `return`).
 - A function with a return type (`-> Side`) must return something on every path, so add `return null` at the end when nothing was found.
 - Report an error in the function that does the lookup (`find_side`), not in every place that calls it. Callers just check for `null` and stop.
+- **Check detection is cheap:** one move function is used for the dots, for check and for checkmate. A few thousand dictionary lookups per click is well under a millisecond, so no clever shortcuts are needed.
+- **Pawns are the exception:** they move straight forward but attack diagonally, so "squares a pawn attacks" isn't the same as "squares it can move to".
+- **Local vs member variables:** a `var` inside a function is created fresh on every call and thrown away afterwards. Data that must stay (like a dictionary) is a member variable, declared at the top of the script outside any function. (Godot's "singletons" are Autoloads, global nodes; not needed here.)
 - A typed `String` can never be `null`. For a dictionary key that might be missing, use `.get(key, "")` and check for `""`, or check `.has(key)` first.
 - **Inkscape's page is only a window.** The importer takes every shape in the file, even ones off the page, and "Plain SVG" doesn't remove them. Export with Export Selected Only (area: Page) instead.
 - Exported game files must keep the 100 × 100 px page. Open the .svg in a text editor and check for `width="100" height="100"` if a piece looks the wrong size.
@@ -324,6 +342,7 @@ Things that tripped me up, so I don't repeat them.
 - **Board drawn in code** (`_draw`), not an image: the colours are settings, the board can be any size, and highlights use the same code.
 - **Pieces as vector nodes** through the plugin, so they stay sharp at any zoom. Fallback: Sprite2D + the shader below.
 - **One SVG per piece type.** Each side's colours are applied in the game.
+- **The board rebuilds its piece nodes from the state after every move** (simple and always in sync). Animations later: slide the moved piece, then sync the rest.
 - **The SVG page and the board square are both 100 × 100.** Pieces fill the page (outline slightly past it); the gap to the square's edge is set in code with `piece_scale`, so it can become a game setting.
 - **Plugin import keeps "Import as ScalableVectorShape2D" on**, as the plugin advises. (An earlier version of this guide said off, which was wrong.)
 - **License: Prosperity Public License 3.0.0**, with commercial licences by agreement.
@@ -354,7 +373,8 @@ Use one ShaderMaterial per side (`white_side.tres`, `black_side.tres`), so chang
 
 ## For AI assistants
 
-- I'm learning Godot and write most of the code myself. Explain and suggest, and don't change code files unless I ask. When reviewing, tell me _why_, not just what.
+- I'm learning Godot. **How we work on code:** for things that are just "how does Godot do X" (syntax, built-in functions, nodes, input), give me the code and tell me exactly which file and where to put it, and I type it in myself. **Stop and let me try** whenever a part needs real problem solving or thinking (not just a lookup). Don't change code files yourself unless I ask. When reviewing, tell me _why_, not just what.
+- Keep each step small and testable: after each step I should be able to run the game (F5) and see that it works, then commit.
 - Follow the naming conventions and architecture rules in this file.
 - Ignore `.godot/` (Godot's cache) and `addons/` (third-party plugin code).
 - Reading `.tscn` scene files is fine, but make scene changes in the Godot editor, not by editing the text.

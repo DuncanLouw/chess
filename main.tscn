@@ -10,5 +10,8 @@ variant = ExtResource("2_h2yge")
 
 [node name="Board" type="Node2D" parent="." unique_id=9588321]
 script = ExtResource("2_lquwl")
+piece_scale = null
+light_color = null
+dark_color = null
 
 [node name="Pieces" type="Node2D" parent="Board" unique_id=343556842]
