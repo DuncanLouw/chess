@@ -9,10 +9,14 @@ var squares: Dictionary[Vector2i, PieceData] = {}
 # Whose turn it is, as an index into variant.sides (0 = the first side in the list)
 var turn := 0
 
+# How many sides take turns (2 in standard chess)
+var side_count := 0
+
 
 # Fills `squares` from the variant's layout text
 func load_layout(variant: ChessVariant) -> void:
 	squares.clear()
+	side_count = variant.sides.size()
 	var rows: Array = variant.layout.strip_edges().split("\n", false)
 	for row_num in range(len(rows)):
 		var codes: Array = rows[row_num].split(" ", false)

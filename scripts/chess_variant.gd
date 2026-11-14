@@ -1,13 +1,15 @@
 class_name ChessVariant
 extends Resource
 
+@export var rules: Rules                   # which rules this variant plays by
+
 @export var piece_names: Dictionary[String, String] = {
-	"B": "bishop",
-	"K": "king",
-	"N": "knight",
-	"P": "pawn",
-	"Q": "queen",
-	"R": "rook"
+	"B": Enum.PIECE_NAMES.BISHOP,
+	"K": Enum.PIECE_NAMES.KING,
+	"N": Enum.PIECE_NAMES.KNIGHT,
+	"P": Enum.PIECE_NAMES.PAWN,
+	"Q": Enum.PIECE_NAMES.QUEEN,
+	"R": Enum.PIECE_NAMES.ROOK
 }
 
 @export var display_name := "Standard chess"

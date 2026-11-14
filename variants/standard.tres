@@ -1,7 +1,12 @@
 [gd_resource type="Resource" script_class="ChessVariant" format=3 uid="uid://5qqr61j3ebnd"]
 
 [ext_resource type="Script" uid="uid://bgn2fcmklrhot" path="res://scripts/chess_variant.gd" id="1_pf6om"]
+[ext_resource type="Script" uid="uid://bs82nmtylf5v4" path="res://scripts/rules/rules.gd" id="1_r6gxu"]
 [ext_resource type="Script" uid="uid://ba1upaondn2ys" path="res://scripts/side.gd" id="2_r6gxu"]
+
+[sub_resource type="Resource" id="Resource_46oa4"]
+script = ExtResource("1_r6gxu")
+metadata/_custom_type_script = "uid://bs82nmtylf5v4"
 
 [sub_resource type="Resource" id="Resource_qo8n1"]
 script = ExtResource("2_r6gxu")
@@ -17,6 +22,7 @@ metadata/_custom_type_script = "uid://ba1upaondn2ys"
 
 [resource]
 script = ExtResource("1_pf6om")
+rules = SubResource("Resource_46oa4")
 sides = Array[ExtResource("2_r6gxu")]([SubResource("Resource_qo8n1"), SubResource("Resource_4ibx0")])
 layout = "bR bN bB bQ bK bB bN bR
 bP bP bP bP bP bP bP bP

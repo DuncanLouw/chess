@@ -153,11 +153,14 @@ Antialiasing softens the "staircase" pixels along diagonal and curved edges. Not
 
 **Data objects in Godot:** a `Node` lives in the scene (draws, gets input). A `Resource` is data saved as a file and edited in the Inspector (`ChessVariant`, `Side`). A `RefCounted` is plain data that only exists while the game runs and is deleted automatically when nothing uses it (`GameState`, `PieceData`, later `Move`).
 
-**A move from start to finish:**
+**A click from start to finish:**
 
-1. The player clicks a piece. The view asks `rules.get_legal_moves(state, square)` and highlights those squares.
-2. The player clicks a highlighted square, and `rules.apply_move(state, move)` changes the state.
-3. The view updates to match the state, and `rules.get_winner(state)` checks whether the game is over.
+1. The **Board** turns the click or tap into a square (`position_to_square`) and sends its `square_clicked` signal. It decides nothing itself.
+2. **`main.gd`** receives it (`_on_square_clicked`) and does one of three things:
+   - a move of the selected piece goes to that square: `rules.apply_move(state, move)`, deselect, then `board.show_state(...)`
+   - it's one of the current player's pieces: `rules.get_legal_moves(state, square)`, then `board.show_moves(...)` (selected square tinted, dots on empty targets, tinted squares for captures)
+   - anything else: deselect (`board.clear_moves()`)
+3. Later: after each move, `rules.get_winner(state)` checks whether the game is over.
 
 ### Rules are small functions that can be overridden
 
@@ -186,6 +189,10 @@ Planned functions. Names can change while building, but each function keeps one 
 
 - **Rules never store the game.** Every function receives the state as a parameter. That lets the rules try a move on a _copy_ of the state, which is how check detection works.
 - Rules extend `Resource`, so they can have **settings** (`@export` variables) that each variant sets in the Inspector, for example `@export var explosion_radius := 1`.
+- **Each variant picks its rules in the Inspector:** ChessVariant → Rules → *New Rules* (standard chess). A variant with changed rules picks its own class instead, e.g. *New AtomicRules*. `main.gd` won't start a game whose variant has no Rules set.
+- **Movement helpers** in `rules.gd`: `_slide_moves(state, from, directions)` (rook, bishop, queen: keep going until the edge or a piece) and `_step_moves(state, from, steps)` (king, knight: one step or jump each). Direction lists are constants: `STRAIGHT`, `DIAGONAL`, `ALL_DIRECTIONS`.
+- A **Move** (`scripts/move.gd`, RefCounted) holds `from` and `to`, and later the extras for special moves.
+- `GameState.side_count` (from the variant) is used for whose turn is next: `(turn + 1) % side_count`.
 
 **Movement patterns.** Most pieces are a list of directions plus whether they slide:
 
@@ -282,11 +289,13 @@ Piece letters use standard chess notation: **K** king, **Q** queen, **R** rook, 
 - [ ] Restructure: placing piece nodes moves to `board.gd` (`add_piece`), reading the layout moves to `game_state.gd`. Do this before movement
 - [ ] **Rules, in build order:**
   1. GameState: board as a Dictionary (`Vector2i` → piece data, `null` = empty, missing = not on the board), whose turn it is. Layout reading moves out of `main.gd`; the board shows pieces from the state. No visible change.
-  2. Moves for the bishop, rook, queen and king (ignoring check), plus tap/click to select, dots on the legal squares, tap a dot to move
+  2. Moves for the bishop, rook, queen and king (ignoring check), plus tap/click to select, dots on the legal squares, tap a dot to move (**in progress**: code is in. To do: set Rules → New Rules in `standard.tres`, make `test_no_pawns.tres`, test with F5)
+     - Knight solved: `KNIGHT_JUMPS` + `_step_moves`. To do: uncomment its `match` branch, remove the other commented-out branches
+     - Replace `enum.gd` (a Dictionary called `Enum`) with string constants in `scripts/piece_type.gd` (`class_name PieceType`, `const ROOK := "rook"`, ...)
   3. Knight, then the pawn (forward only, double first move, diagonal capture, en passant): I try these myself
   4. Check: "is this square attacked by side X?" + throw away moves that leave your own king attacked
   5. Castling (my turn to try), promotion, checkmate and stalemate
-- [ ] Real art: king, rook and pawn done. Queen in progress (only the crown so far). Bishop and knight are still rook placeholders
+- [ ] Real art: king, rook, pawn, bishop and knight done. Queen in progress
 - [x] `piece_scale` (default 0.9) on Board, applied when placing pieces. Later: a player setting
 - [ ] Decide: same height for every piece, or keep relative sizes (see "Piece sizes compared to each other")
 - [ ] Publishing on GitHub: README.md, LICENSE.md (with the repo link) and CREDITS.md done, first commit made locally ("Initial commit", Duncan Louw <duncan.louw4@gmail.com>). To do: publish / push to https://github.com/DuncanLouw/chess
@@ -315,6 +324,13 @@ Things that tripped me up, so I don't repeat them.
 - Report an error in the function that does the lookup (`find_side`), not in every place that calls it. Callers just check for `null` and stop.
 - **Check detection is cheap:** one move function is used for the dots, for check and for checkmate. A few thousand dictionary lookups per click is well under a millisecond, so no clever shortcuts are needed.
 - **Pawns are the exception:** they move straight forward but attack diagonally, so "squares a pawn attacks" isn't the same as "squares it can move to".
+- **Piece type names are string constants** (`PieceType.ROOK`), not a GDScript `enum`. A real `enum` gives numbers, but piece types have to be text: they name the scene files and come from the variant's data, and a variant can add a new type without touching a central list. Constants still give autocomplete, and a typo (`PieceType.ROKK`) is an error before the game runs.
+- **A `const` can't call a function**, but constants can be built from other constants (`const ALL_DIRECTIONS = STRAIGHT + DIAGONAL`). For a handful of fixed values like the knight's 8 jumps, writing them out is clearer than generating them with loops.
+- **Signals:** a node announces that something happened (`signal square_clicked(square: Vector2i)`, then `square_clicked.emit(square)`), and other nodes listen with `board.square_clicked.connect(_on_square_clicked)`. The sender doesn't need to know who listens, which keeps the Board free of game logic.
+- **`@onready var board: Board = $Board`** fetches the node once the scene is ready, with a type, so autocomplete works. Better than writing `$Board` everywhere.
+- **`queue_redraw()`** asks Godot to call `_draw()` again (for example when the highlights change). Everything drawn in a node's `_draw()` appears *under* its child nodes, so dots and tints are drawn under the pieces.
+- **Clicks:** `_unhandled_input(event)` receives input that no UI used. A tap on a touch screen arrives as a left mouse click (Project Settings → Input Devices → Pointing → Emulate Mouse From Touch, on by default). `make_input_local(event)` converts the click position into the node's own coordinates, so it works wherever the board is placed or however the window is scaled.
+- **`property = null` lines in a .tscn** appear when a scene is saved while one of its scripts has an error (Godot can't read the defaults). Fix: select the node, click the revert arrow (↺) next to the affected properties in the Inspector, and save the scene.
 - **Local vs member variables:** a `var` inside a function is created fresh on every call and thrown away afterwards. Data that must stay (like a dictionary) is a member variable, declared at the top of the script outside any function. (Godot's "singletons" are Autoloads, global nodes; not needed here.)
 - A typed `String` can never be `null`. For a dictionary key that might be missing, use `.get(key, "")` and check for `""`, or check `.has(key)` first.
 - **Inkscape's page is only a window.** The importer takes every shape in the file, even ones off the page, and "Plain SVG" doesn't remove them. Export with Export Selected Only (area: Page) instead.
