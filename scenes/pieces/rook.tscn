@@ -81,16 +81,16 @@ script = ExtResource("1_s0foh")
 svg_resource_path = "res://sprites/pieces/rook.svg"
 metadata/_checksum = "850d0ee6214c5c7d8a7b53b789a6bfb0"
 
-[node name="Rook" type="Node2D" parent="SyncedSVGRoot" unique_id=1076138340]
+[node name="Rook" type="Node2D" parent="SyncedSVGRoot" unique_id=1197847848]
 scale = Vector2(3.7795277, 3.7795277)
 metadata/svg_root = true
 
-[node name="layer1" type="Node2D" parent="SyncedSVGRoot/Rook" unique_id=1246366252]
+[node name="layer1" type="Node2D" parent="SyncedSVGRoot/Rook" unique_id=175634701]
 position = Vector2(13.229165, 13.229165)
 metadata/svg_style = {}
 metadata/is_svg_group = true
 
-[node name="rect2" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=693179710 node_paths=PackedStringArray("polygon", "line")]
+[node name="rect2" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=939426580 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(1.9073486e-06, 12.043382)
 scale = Vector2(1.0428342, 1.0428342)
 script = ExtResource("1_2u0gx")
@@ -105,11 +105,11 @@ arc_list = SubResource("Resource_sh11o")
 shape_type = 1
 size = Vector2(18.672878, 2.2741547)
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/rect2" unique_id=778345734]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/rect2" unique_id=809331685]
 polygon = PackedVector2Array(-9.336439, -1.1370773, 9.336439, -1.1370773, 9.336439, 1.1370773, -9.336439, 1.1370773)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/rect2" unique_id=553792537]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/rect2" unique_id=20687282]
 points = PackedVector2Array(-9.336439, -1.1370773, 9.336439, -1.1370773, 9.336439, 1.1370773, -9.336439, 1.1370773)
 closed = true
 width = 0.958925
@@ -118,7 +118,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="rect3" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=1330920164 node_paths=PackedStringArray("polygon", "line")]
+[node name="rect3" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=1233226547 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(0, 9.244939)
 scale = Vector2(1.0428342, 1.0428342)
 script = ExtResource("1_2u0gx")
@@ -133,11 +133,11 @@ arc_list = SubResource("Resource_invhe")
 shape_type = 1
 size = Vector2(13.032974, 3.0928504)
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/rect3" unique_id=2043057455]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/rect3" unique_id=1571178258]
 polygon = PackedVector2Array(-6.516487, -1.5464252, 6.516487, -1.5464252, 6.516487, 1.5464252, -6.516487, 1.5464252)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/rect3" unique_id=277373213]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/rect3" unique_id=1562561777]
 points = PackedVector2Array(-6.516487, -1.5464252, 6.516487, -1.5464252, 6.516487, 1.5464252, -6.516487, 1.5464252)
 closed = true
 width = 0.958925
@@ -146,7 +146,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="rect4" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=905469624 node_paths=PackedStringArray("polygon", "line")]
+[node name="rect4" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=2109620183 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(1.9073486e-06, -0.24740314)
 scale = Vector2(1.0428342, 1.0428342)
 script = ExtResource("1_2u0gx")
@@ -161,11 +161,11 @@ arc_list = SubResource("Resource_3k4ps")
 shape_type = 1
 size = Vector2(10.758819, 9.720222)
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/rect4" unique_id=84910267]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/rect4" unique_id=86962781]
 polygon = PackedVector2Array(-5.3794093, -4.860111, 5.3794093, -4.860111, 5.3794093, 4.860111, -5.3794093, 4.860111)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/rect4" unique_id=872748213]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/rect4" unique_id=342302669]
 points = PackedVector2Array(-5.3794093, -4.860111, 5.3794093, -4.860111, 5.3794093, 4.860111, -5.3794093, 4.860111)
 closed = true
 width = 0.958925
@@ -174,7 +174,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="path4" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=1863510918 node_paths=PackedStringArray("polygon", "line")]
+[node name="path4" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=163103953 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(0, 6.2265787)
 scale = Vector2(1.0428342, 1.0428342)
 script = ExtResource("1_2u0gx")
@@ -187,11 +187,11 @@ curve = SubResource("Curve2D_pmefj")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_h6w2w")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/path4" unique_id=2084218302]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/path4" unique_id=186380397]
 polygon = PackedVector2Array(-6.516486, 1.34795, -5.379408, -1.34795, 5.37941, -1.34795, 6.516487, 1.3479481)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/path4" unique_id=1597503604]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/path4" unique_id=1900117344]
 points = PackedVector2Array(-6.516486, 1.34795, -5.379408, -1.34795, 5.37941, -1.34795, 6.516487, 1.3479481)
 closed = true
 width = 0.958925
@@ -200,7 +200,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="rect5" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=726633679 node_paths=PackedStringArray("polygon", "line")]
+[node name="rect5" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=1878326478 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(0, -10.678122)
 scale = Vector2(1.0428342, 1.0428342)
 script = ExtResource("1_2u0gx")
@@ -213,11 +213,11 @@ curve = SubResource("Curve2D_tujva")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_k3882")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/rect5" unique_id=809448304]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/rect5" unique_id=115588793]
 polygon = PackedVector2Array(-7.3412485, -2.4462597, -7.3412485, 0.8153753, -7.3412485, 2.4462597, 7.3412495, 2.4462597, 7.3412495, 0.8153753, 7.3412495, -0.8154423, 7.3412495, -2.4462597, 4.8327065, -2.4462597, 4.8327065, -0.8154423, 1.8493023, -0.8154423, 1.8493023, -2.4462597, -1.8492346, -2.4462597, -1.8492346, -0.8154423, -4.832638, -0.8154423, -4.832638, -2.4462597)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/rect5" unique_id=752895102]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/rect5" unique_id=787572852]
 points = PackedVector2Array(-7.3412485, -2.4462597, -7.3412485, 0.8153753, -7.3412485, 2.4462597, 7.3412495, 2.4462597, 7.3412495, 0.8153753, 7.3412495, -0.8154423, 7.3412495, -2.4462597, 4.8327065, -2.4462597, 4.8327065, -0.8154423, 1.8493023, -0.8154423, 1.8493023, -2.4462597, -1.8492346, -2.4462597, -1.8492346, -0.8154423, -4.832638, -0.8154423, -4.832638, -2.4462597)
 closed = true
 width = 0.958925
@@ -226,7 +226,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="path8" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=1583773425 node_paths=PackedStringArray("polygon", "line")]
+[node name="path8" type="Node2D" parent="SyncedSVGRoot/Rook/layer1" unique_id=1015533932 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(0, -6.721386)
 scale = Vector2(1.0428342, 1.0428342)
 script = ExtResource("1_2u0gx")
@@ -239,11 +239,11 @@ curve = SubResource("Curve2D_gaxe5")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_km7rw")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/path8" unique_id=611958208]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Rook/layer1/path8" unique_id=958688575]
 polygon = PackedVector2Array(-7.341248, -1.3479543, -5.379408, 1.3479543, 5.37941, 1.3479543, 7.3412495, -1.3479543)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/path8" unique_id=2063726040]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Rook/layer1/path8" unique_id=1420924078]
 points = PackedVector2Array(-7.341248, -1.3479543, -5.379408, 1.3479543, 5.37941, 1.3479543, 7.3412495, -1.3479543)
 closed = true
 width = 0.958925

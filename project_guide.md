@@ -33,10 +33,11 @@ chess/
 ├── main.tscn            ← the main scene
 ├── scenes/pieces/       ← one scene per piece type (rook.tscn, knight.tscn, ...)
 ├── scripts/             ← all .gd scripts
+│   ├── config/          ← fixed names used across the code (piece_names.gd)
 │   └── rules/           ← rule scripts (standard chess + one per variant that changes rules)
 ├── sprites/pieces/      ← piece art the game uses (.svg), exported from art_source
 ├── art_source/pieces/   ← Inkscape working files (has .gdignore, so Godot ignores it)
-├── variants/            ← one .tres file per chess variant (standard.tres, ...)
+├── variants/            ← one .tres file per chess variant (standard.tres; test_*.tres for testing)
 └── addons/              ← plugins, don't edit
 ```
 
@@ -289,10 +290,9 @@ Piece letters use standard chess notation: **K** king, **Q** queen, **R** rook, 
 - [ ] Restructure: placing piece nodes moves to `board.gd` (`add_piece`), reading the layout moves to `game_state.gd`. Do this before movement
 - [ ] **Rules, in build order:**
   1. GameState: board as a Dictionary (`Vector2i` → piece data, `null` = empty, missing = not on the board), whose turn it is. Layout reading moves out of `main.gd`; the board shows pieces from the state. No visible change.
-  2. Moves for the bishop, rook, queen and king (ignoring check), plus tap/click to select, dots on the legal squares, tap a dot to move (**in progress**: code is in. To do: set Rules → New Rules in `standard.tres`, make `test_no_pawns.tres`, test with F5)
-     - Knight solved: `KNIGHT_JUMPS` + `_step_moves`. To do: uncomment its `match` branch, remove the other commented-out branches
-     - Replace `enum.gd` (a Dictionary called `Enum`) with string constants in `scripts/piece_type.gd` (`class_name PieceType`, `const ROOK := "rook"`, ...)
-  3. Knight, then the pawn (forward only, double first move, diagonal capture, en passant): I try these myself
+  2. **Done:** moves for the rook, bishop, queen and king (ignoring check), tap/click to select, dots and capture tints, tap to move. Rules set in `standard.tres`; test variants `test_no_pawns.tres` and `test_only_knight.tres`. Piece type names are constants in `scripts/config/piece_names.gd` (`PieceNames.ROOK`, ...).
+     - **Lag between moves (open):** see "Performance" under Notes and gotchas. `main.gd` has a temporary timing `print` around `board.show_state` until this is fixed.
+  3. **Knight: done** (`KNIGHT_JUMPS` + `_step_moves`). Next: the pawn (forward only, double first move, diagonal capture, en passant): I try this myself. Tidy up: remove the old commented-out knight experiment and duplicate branches in `rules.gd`
   4. Check: "is this square attacked by side X?" + throw away moves that leave your own king attacked
   5. Castling (my turn to try), promotion, checkmate and stalemate
 - [ ] Real art: king, rook, pawn, bishop and knight done. Queen in progress
@@ -324,7 +324,9 @@ Things that tripped me up, so I don't repeat them.
 - Report an error in the function that does the lookup (`find_side`), not in every place that calls it. Callers just check for `null` and stop.
 - **Check detection is cheap:** one move function is used for the dots, for check and for checkmate. A few thousand dictionary lookups per click is well under a millisecond, so no clever shortcuts are needed.
 - **Pawns are the exception:** they move straight forward but attack diagonally, so "squares a pawn attacks" isn't the same as "squares it can move to".
-- **Piece type names are string constants** (`PieceType.ROOK`), not a GDScript `enum`. A real `enum` gives numbers, but piece types have to be text: they name the scene files and come from the variant's data, and a variant can add a new type without touching a central list. Constants still give autocomplete, and a typo (`PieceType.ROKK`) is an error before the game runs.
+- **Performance: lag between moves (found 15 Nov, open).** Noticeable with all pieces on the board, fine with only the knights. **Measured:** `show_state` took **140.8 ms** with the full board and **9.7 ms** with two pieces left (a frame is 16.7 ms at 60 fps, so 140 ms is a visible hitch). Same when plugged in, so not the battery. Same with Is Update Curve At Runtime off, so the cost is *creating* the nodes, not updating curves. Next test: plain raster textures (Sprite2D) instead of the vector scenes, to confirm; the SVGs are already imported as textures, so this can be a few temporary lines in `add_piece`. Likely cause: `Board.show_state` deletes and recreates **all 32 piece scenes after every move**, and the plugin's pieces are heavy: each piece has 7 to 37 nodes, and every ScalableVectorShape2D node has a script that connects signals when it's created and runs `_process` every frame. That's roughly 400+ scripted nodes rebuilt per move. Only knights = 4 pieces, so it stayed fast. To confirm: time `show_state` with `Time.get_ticks_usec()`, or use Debugger → Profiler. (Going back to an older commit won't help compare: before clicking existed, pieces were only created once.) Planned fix: only update the squares that changed (remove the moved/captured nodes, create the new one) instead of rebuilding everything. That was already the plan for animations. Possible extras: untick **Is Update Curve At Runtime** on each piece's SyncedSVGRoot; later, use the plugin's baked export (plain nodes, no scripts) for the scenes the game loads.
+- **Piece type names are string constants** (`PieceNames.ROOK` in `scripts/config/piece_names.gd`), not a GDScript `enum`. A GDScript `enum` gives names to **numbers**: `enum Piece { ROOK, KNIGHT }` makes ROOK = 0 and KNIGHT = 1, and printing it shows `0`. Piece types have to be text: they name the scene files and come from the variant's data, and a variant can add a new type without touching a central list. Constants still give autocomplete, and a typo (`PieceNames.ROKK`) is an error before the game runs.
+- **Why I first made a Dictionary called `Enum`:** in my university capstone project, the database had enums (for example user roles), and its queries needed each enum value's *name as text*. So I made a class holding dictionaries of those names, and carried that habit over here. Database enums are text labels; enums in GDScript (and C#, C++, Java) are named numbers. Same word, different thing. A Dictionary also doesn't check its keys, so a typo only fails while the game runs; named constants are checked before it runs.
 - **A `const` can't call a function**, but constants can be built from other constants (`const ALL_DIRECTIONS = STRAIGHT + DIAGONAL`). For a handful of fixed values like the knight's 8 jumps, writing them out is clearer than generating them with loops.
 - **Signals:** a node announces that something happened (`signal square_clicked(square: Vector2i)`, then `square_clicked.emit(square)`), and other nodes listen with `board.square_clicked.connect(_on_square_clicked)`. The sender doesn't need to know who listens, which keeps the Board free of game logic.
 - **`@onready var board: Board = $Board`** fetches the node once the scene is ready, with a type, so autocomplete works. Better than writing `$Board` everywhere.

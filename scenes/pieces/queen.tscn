@@ -136,16 +136,16 @@ script = ExtResource("1_e50qi")
 svg_resource_path = "res://sprites/pieces/queen.svg"
 metadata/_checksum = "99e5a9c4c4985826f92de21eeeed63c7"
 
-[node name="Queen" type="Node2D" parent="SyncedSVGRoot" unique_id=998210144]
+[node name="Queen" type="Node2D" parent="SyncedSVGRoot" unique_id=1829504668]
 scale = Vector2(3.7795277, 3.7795277)
 metadata/svg_root = true
 
-[node name="layer1" type="Node2D" parent="SyncedSVGRoot/Queen" unique_id=469924905]
+[node name="layer1" type="Node2D" parent="SyncedSVGRoot/Queen" unique_id=1612133444]
 position = Vector2(13.493751, 5.2311244)
 metadata/svg_style = {}
 metadata/is_svg_group = true
 
-[node name="path22" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=592346885 node_paths=PackedStringArray("polygon", "line")]
+[node name="path22" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=923463131 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(6.970851, 1.107995)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -157,11 +157,11 @@ curve = SubResource("Curve2D_xym5b")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_j52wk")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path22" unique_id=438495070]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path22" unique_id=380708159]
 polygon = PackedVector2Array(-1.742712, 3.7537851, 1.7427139, 3.7537851, 1.7427139, -3.7537844)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path22" unique_id=1226970646]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path22" unique_id=1763626521]
 points = PackedVector2Array(-1.742712, 3.7537851, 1.7427139, 3.7537851, 1.7427139, -3.7537844)
 closed = true
 width = 1.0
@@ -170,7 +170,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="path26" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=401960017 node_paths=PackedStringArray("polygon", "line")]
+[node name="path26" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=548611531 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(3.0497465, 1.107995)
 script = ExtResource("1_2cxqa")
 fill_color = Color(0, 0, 0, 1)
@@ -183,12 +183,12 @@ curve = SubResource("Curve2D_h8pfx")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_i0c0c")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path26" unique_id=228498166]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path26" unique_id=1717084347]
 color = Color(0, 0, 0, 1)
 polygon = PackedVector2Array(1.3070354, -3.753785, -1.3070345, 3.7537851)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path26" unique_id=386114609]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path26" unique_id=1113057986]
 points = PackedVector2Array(1.3070354, -3.753785, -1.3070345, 3.7537851)
 width = 1.0
 default_color = Color(0, 0, 0, 1)
@@ -196,7 +196,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="path27" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=598340894 node_paths=PackedStringArray("polygon", "line")]
+[node name="path27" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=869658843 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(3.485425, 1.1101851)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -208,11 +208,11 @@ curve = SubResource("Curve2D_m8dhv")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_nslax")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path27" unique_id=13081117]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path27" unique_id=80279060]
 polygon = PackedVector2Array(-1.7427139, 3.7559738, 1.742712, 3.7559738, 0.87135696, -3.7559745)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path27" unique_id=1723148339]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path27" unique_id=2146361286]
 points = PackedVector2Array(-1.7427139, 3.7559738, 1.742712, 3.7559738, 0.87135696, -3.7559745)
 closed = true
 width = 1.0
@@ -221,7 +221,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="path28" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1349505527 node_paths=PackedStringArray("polygon", "line")]
+[node name="path28" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=810694146 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(-6.97085, 1.1123734)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -233,11 +233,11 @@ curve = SubResource("Curve2D_tb7io")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_afm5p")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path28" unique_id=319084507]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path28" unique_id=2013937646]
 polygon = PackedVector2Array(1.742713, 3.7537851, -1.7427125, 3.7537851, -1.7427125, -3.753785)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path28" unique_id=1948417841]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path28" unique_id=46458580]
 points = PackedVector2Array(1.742713, 3.7537851, -1.7427125, 3.7537851, -1.7427125, -3.753785)
 closed = true
 width = 1.0
@@ -246,7 +246,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="path29" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=831101126 node_paths=PackedStringArray("polygon", "line")]
+[node name="path29" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1619342403 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(-3.485426, 1.1101851)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -258,11 +258,11 @@ curve = SubResource("Curve2D_pglmd")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_3ajci")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path29" unique_id=500864892]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path29" unique_id=204952636]
 polygon = PackedVector2Array(1.742712, 3.7559738, -1.742712, 3.7559738, -0.87135696, -3.7559743)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path29" unique_id=2101322737]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path29" unique_id=1279111904]
 points = PackedVector2Array(1.742712, 3.7559738, -1.742712, 3.7559738, -0.87135696, -3.7559743)
 closed = true
 width = 1.0
@@ -271,7 +271,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="circle18" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1198464564 node_paths=PackedStringArray("polygon", "line")]
+[node name="circle18" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=263675005 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(-8.713565, -3.7750998)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -287,11 +287,11 @@ size = Vector2(2.2673774, 2.2673774)
 rx = 1.1336887
 ry = 1.1336887
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle18" unique_id=1579880597]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle18" unique_id=318311627]
 polygon = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle18" unique_id=1531453131]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle18" unique_id=1093748840]
 points = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 closed = true
 width = 0.644672
@@ -300,7 +300,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="circle19" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=877196080 node_paths=PackedStringArray("polygon", "line")]
+[node name="circle19" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1937378523 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(-4.356784, -3.779478)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -316,11 +316,11 @@ size = Vector2(2.2673774, 2.2673774)
 rx = 1.1336887
 ry = 1.1336887
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle19" unique_id=301543173]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle19" unique_id=440859958]
 polygon = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle19" unique_id=1753360243]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle19" unique_id=2018651341]
 points = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 closed = true
 width = 0.644672
@@ -329,7 +329,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="circle20" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=568916441 node_paths=PackedStringArray("polygon", "line")]
+[node name="circle20" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=429028051 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(-1.9073486e-06, -3.7794771)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -345,11 +345,11 @@ size = Vector2(2.2673774, 2.2673774)
 rx = 1.1336887
 ry = 1.1336887
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle20" unique_id=875585478]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle20" unique_id=1280109094]
 polygon = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle20" unique_id=658923269]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle20" unique_id=751002394]
 points = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 closed = true
 width = 0.644672
@@ -358,7 +358,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="circle21" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1105728517 node_paths=PackedStringArray("polygon", "line")]
+[node name="circle21" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1804813684 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(4.356782, -3.779478)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -374,11 +374,11 @@ size = Vector2(2.2673774, 2.2673774)
 rx = 1.1336887
 ry = 1.1336887
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle21" unique_id=1586814826]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle21" unique_id=196176098]
 polygon = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle21" unique_id=652234007]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle21" unique_id=1403576559]
 points = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 closed = true
 width = 0.644672
@@ -387,7 +387,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="circle22" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1776744162 node_paths=PackedStringArray("polygon", "line")]
+[node name="circle22" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1044375083 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(8.713565, -3.7794776)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -403,11 +403,11 @@ size = Vector2(2.2673774, 2.2673774)
 rx = 1.1336887
 ry = 1.1336887
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle22" unique_id=1030111645]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/circle22" unique_id=68772016]
 polygon = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle22" unique_id=1191828289]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/circle22" unique_id=464060125]
 points = PackedVector2Array(1.1336887, 0, 1.1278358, 0.11591593, 1.1106569, 0.22848277, 1.0827218, 0.33713076, 1.0446002, 0.44129005, 0.99686205, 0.540391, 0.94007707, 0.63386375, 0.87481487, 0.7211384, 0.8016454, 0.8016454, 0.7211385, 0.8748148, 0.6338637, 0.940077, 0.54039097, 0.9968621, 0.44129008, 1.0446002, 0.33713076, 1.0827217, 0.22848275, 1.1106569, 0.11591593, 1.1278358, 0, 1.1336887, -0.11591593, 1.1278358, -0.22848277, 1.1106569, -0.33713076, 1.0827218, -0.44129005, 1.0446002, -0.540391, 0.99686205, -0.63386375, 0.94007707, -0.7211384, 0.87481487, -0.8016454, 0.8016454, -0.8748148, 0.7211385, -0.940077, 0.6338637, -0.9968621, 0.54039097, -1.0446002, 0.44129008, -1.0827217, 0.33713076, -1.1106569, 0.22848275, -1.1278358, 0.11591593, -1.1336887, 0, -1.1278358, -0.11591593, -1.1106569, -0.22848277, -1.0827218, -0.33713076, -1.0446002, -0.44129005, -0.99686205, -0.540391, -0.94007707, -0.63386375, -0.87481487, -0.7211384, -0.8016454, -0.8016454, -0.7211385, -0.8748148, -0.6338637, -0.940077, -0.54039097, -0.9968621, -0.44129008, -1.0446002, -0.33713076, -1.0827217, -0.22848275, -1.1106569, -0.11591593, -1.1278358, 0, -1.1336887, 0.11591593, -1.1278358, 0.22848277, -1.1106569, 0.33713076, -1.0827218, 0.44129005, -1.0446002, 0.540391, -0.99686205, 0.63386375, -0.94007707, 0.7211384, -0.87481487, 0.8016454, -0.8016454, 0.8748148, -0.7211385, 0.940077, -0.6338637, 0.9968621, -0.54039097, 1.0446002, -0.44129008, 1.0827217, -0.33713076, 1.1106569, -0.22848275, 1.1278358, -0.11591593)
 closed = true
 width = 0.644672
@@ -416,7 +416,7 @@ joint_mode = 2
 sharp_limit = 4.0
 metadata/_edit_lock_ = true
 
-[node name="path30" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1899484885 node_paths=PackedStringArray("polygon", "line")]
+[node name="path30" type="Node2D" parent="SyncedSVGRoot/Queen/layer1" unique_id=1017558618 node_paths=PackedStringArray("polygon", "line")]
 position = Vector2(-1.9073486e-06, 1.1101851)
 script = ExtResource("1_2cxqa")
 polygon = NodePath("Fill")
@@ -427,11 +427,11 @@ curve = SubResource("Curve2D_0ockk")
 update_curve_at_runtime = true
 arc_list = SubResource("Resource_jwdv0")
 
-[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path30" unique_id=1249298484]
+[node name="Fill" type="Polygon2D" parent="SyncedSVGRoot/Queen/layer1/path30" unique_id=861446130]
 polygon = PackedVector2Array(-1.742713, 3.7559738, 1.742712, 3.7559738, -9.536743e-07, -3.7559736)
 metadata/_edit_lock_ = true
 
-[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path30" unique_id=1741856363]
+[node name="Stroke" type="Line2D" parent="SyncedSVGRoot/Queen/layer1/path30" unique_id=1969042086]
 points = PackedVector2Array(-1.742713, 3.7559738, 1.742712, 3.7559738, -9.536743e-07, -3.7559736)
 closed = true
 width = 1.0

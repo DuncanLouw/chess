@@ -4,12 +4,12 @@ extends Resource
 @export var rules: Rules                   # which rules this variant plays by
 
 @export var piece_names: Dictionary[String, String] = {
-	"B": Enum.PIECE_NAMES.BISHOP,
-	"K": Enum.PIECE_NAMES.KING,
-	"N": Enum.PIECE_NAMES.KNIGHT,
-	"P": Enum.PIECE_NAMES.PAWN,
-	"Q": Enum.PIECE_NAMES.QUEEN,
-	"R": Enum.PIECE_NAMES.ROOK
+	"B": PieceNames.BISHOP,
+	"K": PieceNames.KING,
+	"N": PieceNames.KNIGHT,
+	"P": PieceNames.PAWN,
+	"Q": PieceNames.QUEEN,
+	"R": PieceNames.ROOK
 }
 
 @export var display_name := "Standard chess"

@@ -11,14 +11,6 @@ const ALL_DIRECTIONS = STRAIGHT + DIAGONAL
 const KNIGHT_JUMPS = [Vector2i(1,2), Vector2i(1,-2), Vector2i(-1,2), Vector2i(-1,-2), Vector2i(2,1), Vector2i(2,-1), Vector2i(-2,1), Vector2i(-2,-1)]
 #const PAWN_move = 
 
-#func get_knight_moves() -> Array:
-	#var knight_jump: Array = []
-	# I was planning on making a function that can auto create all 8 knight moves, by looping or something,
-	# but I realised you can't make a const call a function. 
-	# also I cannot think of a way to actually do it without making 3 loops,
-	# which seems like a waste when nearly half of it is still hard coded anyways
-	#return []
-
 # Where the piece on `from` could move, ignoring check (check comes in a later step)
 func get_piece_moves(state: GameState, from: Vector2i) -> Array[Move]:
 	var moves: Array[Move] = []
@@ -26,19 +18,17 @@ func get_piece_moves(state: GameState, from: Vector2i) -> Array[Move]:
 	if piece == null:
 		return moves
 	match piece.type:
-		Enum.PIECE_NAMES.ROOK:
+		PieceNames.ROOK:
 			moves = _slide_moves(state, from, STRAIGHT)
-		Enum.PIECE_NAMES.BISHOP:
+		PieceNames.BISHOP:
 			moves = _slide_moves(state, from, DIAGONAL)
-		Enum.PIECE_NAMES.QUEEN:
+		PieceNames.QUEEN:
 			moves = _slide_moves(state, from, ALL_DIRECTIONS)
-		Enum.PIECE_NAMES.KING:
+		PieceNames.KING:
 			moves = _step_moves(state, from, ALL_DIRECTIONS)
-		Enum.PIECE_NAMES.KNIGHT:
+		PieceNames.KNIGHT:
 			moves = _step_moves(state, from, KNIGHT_JUMPS)
-		#Enum.PIECE_NAMES.KNIGHT:
-			#moves = _step_moves(state, from, ALL_DIRECTIONS)
-		#Enum.PIECE_NAMES.PAWN:
+		#PieceNames.PAWN:
 			#moves = _step_moves(state, from, ALL_DIRECTIONS)
 	return moves
 

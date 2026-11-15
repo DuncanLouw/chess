@@ -26,7 +26,9 @@ func _on_board_square_clicked(square: Vector2i) -> void:
 		if move.to == square:
 			rules.apply_move(state, move)
 			_deselect()
+			var start := Time.get_ticks_usec()
 			board.show_state(state, variant)
+			print("Redrawing the pieces took %.1f ms" % ((Time.get_ticks_usec() - start) / 1000.0))
 			return
 
 	# 2. One of the current player's own pieces: select it and show its moves
