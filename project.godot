@@ -21,6 +21,7 @@ curved_lines_2d/use_line_2d_for_stroke=true
 curved_lines_2d/hints_enabled=false
 curved_lines_2d/show_point_numbers=false
 curved_lines_2d/editing_enabled=false
+curved_lines_2d/antialiased_line_2d=false
 
 [application]
 

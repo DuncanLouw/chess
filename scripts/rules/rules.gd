@@ -47,6 +47,7 @@ func apply_move(state: GameState, move: Move) -> void:
 	state.squares[move.from] = null
 	piece.has_moved = true
 	state.turn = get_next_side(state)
+	state.history.append(move)
 
 
 # Whose turn is next: the next side in the list, then back to the first

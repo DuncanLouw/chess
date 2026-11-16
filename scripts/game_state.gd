@@ -12,10 +12,14 @@ var turn := 0
 # How many sides take turns (2 in standard chess)
 var side_count := 0
 
+# Every move played so far, in order. Replaying these from the starting layout
+# rebuilds any point of the game (for rewatching, undo, or a save file later).
+var history: Array[Move] = []
 
 # Fills `squares` from the variant's layout text
 func load_layout(variant: ChessVariant) -> void:
 	squares.clear()
+	history.clear()
 	side_count = variant.sides.size()
 	var rows: Array = variant.layout.strip_edges().split("\n", false)
 	for row_num in range(len(rows)):

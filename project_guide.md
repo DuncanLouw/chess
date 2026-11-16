@@ -146,11 +146,14 @@ Antialiasing softens the "staircase" pixels along diagonal and curved edges. Not
 
 **Two dictionaries, two jobs:**
 - `GameState.squares` (`Vector2i` → `PieceData`) is the game itself. The rules read and change it, and can copy it to test a move without anything changing on screen.
-- `Board.piece_nodes` (`Vector2i` → `Piece` node) only tracks which node is drawn on which square. It never decides anything.
+- `Board.piece_nodes` (`PieceData` → `Piece` node) only tracks which node shows which piece. It never decides anything. The key is the piece's **PieceData object**: `apply_move` moves that same object to its new square, so the board can find its node wherever the piece goes.
 
 **How the screen follows the state:**
-- **Now:** after every change, `Board.show_state` deletes all piece nodes and creates them again from the state. The screen can never disagree with the game, and special moves (castling, en passant, promotion, atomic explosions) and future variants need no extra screen code. It costs a few milliseconds per move, which is nothing for a turn-based game. Downside: pieces jump instead of sliding.
-- **Later, for animations:** slide the moved piece's node (the Move says from and to; `piece_nodes` finds the node), then *sync* the rest by comparing `piece_nodes` with the state and adding, removing or swapping whatever doesn't match. Only `board.gd` changes.
+- **After a move: `Board.update_pieces(state, variant)`.** It goes through the state: a piece that already has a node gets its node moved to its square, a piece without a node gets a new one (e.g. a promoted pawn), and nodes whose piece is no longer on the board (captured) are deleted. It never needs to know *what* happened, so castling, en passant, promotion, atomic explosions and future variants need no extra screen code, and the screen can't drift from the game. A normal move creates no nodes at all.
+- **At the start, and with the Refresh button: `Board.show_state`** deletes every node and calls `update_pieces`, which then creates them all (~125 ms for a full board). If Refresh ever changes what you see, `update_pieces` has a bug.
+- **Later, for animations:** in `update_pieces`, slide the node to its new position (a Tween) instead of setting the position directly. Only `board.gd` changes.
+
+**Move history:** `GameState.history` is the list of every Move played, in order; `apply_move` adds to it. It stores *moves*, not copies of the board or lists of changes: replaying the moves from the starting layout rebuilds any point of the game (rewatching, undo, later a save file = variant + moves). This only works if every choice a player makes is in the Move (e.g. which piece a pawn promotes to) and the rules always do the same thing for the same moves.
 
 **Data objects in Godot:** a `Node` lives in the scene (draws, gets input). A `Resource` is data saved as a file and edited in the Inspector (`ChessVariant`, `Side`). A `RefCounted` is plain data that only exists while the game runs and is deleted automatically when nothing uses it (`GameState`, `PieceData`, later `Move`).
 
@@ -291,7 +294,7 @@ Piece letters use standard chess notation: **K** king, **Q** queen, **R** rook, 
 - [ ] **Rules, in build order:**
   1. GameState: board as a Dictionary (`Vector2i` → piece data, `null` = empty, missing = not on the board), whose turn it is. Layout reading moves out of `main.gd`; the board shows pieces from the state. No visible change.
   2. **Done:** moves for the rook, bishop, queen and king (ignoring check), tap/click to select, dots and capture tints, tap to move. Rules set in `standard.tres`; test variants `test_no_pawns.tres` and `test_only_knight.tres`. Piece type names are constants in `scripts/config/piece_names.gd` (`PieceNames.ROOK`, ...).
-     - **Lag between moves (open):** see "Performance" under Notes and gotchas. `main.gd` has a temporary timing `print` around `board.show_state` until this is fixed.
+     - **Lag between moves: fixed (16 Nov).** `Board.update_pieces` (sync by PieceData) takes ~0.1 to 0.2 ms per move instead of ~125 ms. Also added: `GameState.history` and a Refresh button (with its own vector icon). Small to-do: `history.clear()` at the start of `load_layout`.
   3. **Knight: done** (`KNIGHT_JUMPS` + `_step_moves`). Next: the pawn (forward only, double first move, diagonal capture, en passant): I try this myself. Tidy up: remove the old commented-out knight experiment and duplicate branches in `rules.gd`
   4. Check: "is this square attacked by side X?" + throw away moves that leave your own king attacked
   5. Castling (my turn to try), promotion, checkmate and stalemate
@@ -324,10 +327,28 @@ Things that tripped me up, so I don't repeat them.
 - Report an error in the function that does the lookup (`find_side`), not in every place that calls it. Callers just check for `null` and stop.
 - **Check detection is cheap:** one move function is used for the dots, for check and for checkmate. A few thousand dictionary lookups per click is well under a millisecond, so no clever shortcuts are needed.
 - **Pawns are the exception:** they move straight forward but attack diagonally, so "squares a pawn attacks" isn't the same as "squares it can move to".
-- **Performance: lag between moves (found 15 Nov, open).** Noticeable with all pieces on the board, fine with only the knights. **Measured:** `show_state` took **140.8 ms** with the full board and **9.7 ms** with two pieces left (a frame is 16.7 ms at 60 fps, so 140 ms is a visible hitch). Same when plugged in, so not the battery. Same with Is Update Curve At Runtime off, so the cost is *creating* the nodes, not updating curves. Next test: plain raster textures (Sprite2D) instead of the vector scenes, to confirm; the SVGs are already imported as textures, so this can be a few temporary lines in `add_piece`. Likely cause: `Board.show_state` deletes and recreates **all 32 piece scenes after every move**, and the plugin's pieces are heavy: each piece has 7 to 37 nodes, and every ScalableVectorShape2D node has a script that connects signals when it's created and runs `_process` every frame. That's roughly 400+ scripted nodes rebuilt per move. Only knights = 4 pieces, so it stayed fast. To confirm: time `show_state` with `Time.get_ticks_usec()`, or use Debugger → Profiler. (Going back to an older commit won't help compare: before clicking existed, pieces were only created once.) Planned fix: only update the squares that changed (remove the moved/captured nodes, create the new one) instead of rebuilding everything. That was already the plan for animations. Possible extras: untick **Is Update Curve At Runtime** on each piece's SyncedSVGRoot; later, use the plugin's baked export (plain nodes, no scripts) for the scenes the game loads.
+- **Performance: lag between moves (found 15 Nov; fixed 16 Nov: moves now ~0.1 to 0.2 ms).** `Board.show_state` deletes and recreates **all 32 piece scenes after every move**. Measured with `Time.get_ticks_usec()` around `show_state` (editor runs, roughly ±20% between runs):
+
+  | Pieces as... | All 32 pieces, plugged in | Knights only | All pieces, on battery |
+  | --- | --- | --- | --- |
+  | Vector, plugin shapes on (Is Svs) | ~125 ms (119 to 135) | ~10 ms | ~270 ms |
+  | Same, Is Resource Local off | ~115 ms | | |
+  | Same, Is Update Curve At Runtime off | about the same as on | | |
+  | Vector, plain polygons (Import as ScalableVectorShape2D off) | ~85 ms | 6.5 ms | |
+  | Sprite2D (raster texture) | ~35 ms | 3.5 ms | ~85 ms |
+
+  A frame at 60 fps is 16.7 ms, so anything far above that is a visible hitch.
+  - **The plugin's shape nodes cost ~3.5× more than sprites to create**; plain polygons are in between.
+  - **Even sprites take ~35 ms** for a full rebuild, so the real problem is rebuilding everything every move.
+  - **Fix (done):** `Board.update_pieces` moves the existing node of every piece that moved, deletes captured nodes, and only creates nodes for pieces that are new (e.g. promotion). A normal move then creates no nodes at all.
+  - **Decision:** keep the vector pieces. Their cost only shows when the game starts (~125 ms once, fine while loading) and for a new piece (~4 ms).
+  - Errors in editor runs are slow too (each is logged with a trace and sent to the editor). If an error repeats on every move, fix it, because it adds time.
+  - **Experiments go in uncommitted changes** and are undone with GitHub Desktop → Changes → right-click → Discard changes.
 - **Piece type names are string constants** (`PieceNames.ROOK` in `scripts/config/piece_names.gd`), not a GDScript `enum`. A GDScript `enum` gives names to **numbers**: `enum Piece { ROOK, KNIGHT }` makes ROOK = 0 and KNIGHT = 1, and printing it shows `0`. Piece types have to be text: they name the scene files and come from the variant's data, and a variant can add a new type without touching a central list. Constants still give autocomplete, and a typo (`PieceNames.ROKK`) is an error before the game runs.
 - **Why I first made a Dictionary called `Enum`:** in my university capstone project, the database had enums (for example user roles), and its queries needed each enum value's *name as text*. So I made a class holding dictionaries of those names, and carried that habit over here. Database enums are text labels; enums in GDScript (and C#, C++, Java) are named numbers. Same word, different thing. A Dictionary also doesn't check its keys, so a typo only fails while the game runs; named constants are checked before it runs.
 - **A `const` can't call a function**, but constants can be built from other constants (`const ALL_DIRECTIONS = STRAIGHT + DIAGONAL`). For a handful of fixed values like the knight's 8 jumps, writing them out is clearer than generating them with loops.
+- **The Debugger → Errors tab shows runtime errors and warnings too** (including `push_error`). Empty means none happened.
+- **Connecting a signal in the editor:** select the node, open the **Node** tab (next to the Inspector) → Signals, double-click the signal (e.g. a Button's `pressed()`), pick the node whose script should receive it. Godot writes the empty function for you (`_on_refresh_button_pressed`); a green icon next to it in the script editor shows it's connected.
 - **Signals:** a node announces that something happened (`signal square_clicked(square: Vector2i)`, then `square_clicked.emit(square)`), and other nodes listen with `board.square_clicked.connect(_on_square_clicked)`. The sender doesn't need to know who listens, which keeps the Board free of game logic.
 - **`@onready var board: Board = $Board`** fetches the node once the scene is ready, with a type, so autocomplete works. Better than writing `$Board` everywhere.
 - **`queue_redraw()`** asks Godot to call `_draw()` again (for example when the highlights change). Everything drawn in a node's `_draw()` appears *under* its child nodes, so dots and tints are drawn under the pieces.
@@ -368,7 +389,8 @@ Things that tripped me up, so I don't repeat them.
   - *Data* (layouts, variant files, later maybe made by players): `push_error` + return `false`, and that game doesn't start. Only the broken game stops, never the app. Loading reports every mistake in one go.
   - *Code* (things that can't happen if the code is right): `assert(condition, "message")`. It pauses at the line while developing and is removed from exported games.
   - *Later, with menus:* the menu calls the same loading functions. Loading also collects its messages in a list (e.g. "Row 3: unknown piece letter X"); if loading fails, the menu shows them in a popup and stays open. Menus come after standard chess works.
-- **The board rebuilds its piece nodes from the state after every move** (simple and always in sync). Animations later: slide the moved piece, then sync the rest.
+- **After a move, the board syncs its nodes with the state** (`update_pieces`, matching nodes to pieces by their PieceData object) instead of rebuilding everything. `show_state` (full rebuild) is only for the start and the Refresh button. Changed from "rebuild every move" after the performance tests (16 Nov).
+- **Move history is a list of Moves**, replayed from the starting layout when needed; no copies of the board.
 - **The SVG page and the board square are both 100 × 100.** Pieces fill the page (outline slightly past it); the gap to the square's edge is set in code with `piece_scale`, so it can become a game setting.
 - **Plugin import keeps "Import as ScalableVectorShape2D" on**, as the plugin advises. (An earlier version of this guide said off, which was wrong.)
 - **License: Prosperity Public License 3.0.0**, with commercial licences by agreement.

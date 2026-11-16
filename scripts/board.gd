@@ -14,9 +14,12 @@ const SQUARE_SIZE := 100
 @export var move_color := Color(0.0, 0.0, 0.0, 0.25)        # dots on squares it can move to
 @export var capture_color := Color(0.8, 0.1, 0.1, 0.4)      # squares where it can capture
 
-# Which piece node is drawn on which square. Only for the visuals:
-# the game itself is tracked in GameState.
-var piece_nodes: Dictionary[Vector2i, Piece] = {}
+# Which node shows which piece. The key is the piece's PieceData: apply_move moves
+# that same object around the board, so its node can simply follow it.
+var piece_nodes: Dictionary[PieceData, Piece] = {}
+
+# The state currently shown (used to tell captures apart from normal moves when drawing)
+var shown_state: GameState
 
 # What to highlight: the selected square and the selected piece's moves
 var has_selection := false
@@ -40,7 +43,7 @@ func _draw() -> void:
 	# Where it can go: a dot on empty squares, a tinted square where it can capture.
 	# Everything drawn in _draw() appears under the pieces, so the tint shows around the piece.
 	for move in shown_moves:
-		if piece_nodes.has(move.to):
+		if shown_state.squares.get(move.to) != null:
 			draw_rect(square_to_rect(move.to), capture_color)
 		else:
 			draw_circle(square_to_position(move.to), SQUARE_SIZE * 0.15, move_color)
@@ -88,16 +91,39 @@ func clear_moves() -> void:
 	queue_redraw()
 
 
-# Removes all piece nodes, then creates a node for every piece in the state
+# Rebuilds every piece node from scratch. Slow (~125 ms for a full board), so it's only
+# for the start and the Refresh button. After a move, use update_pieces() instead.
 func show_state(state: GameState, variant: ChessVariant) -> void:
 	for node in piece_nodes.values():
 		node.queue_free()    # deletes the node safely at the end of this frame
 	piece_nodes.clear()
+	update_pieces(state, variant)
 
-	for square: Vector2i in state.squares:    # looping over a dictionary gives its keys
+
+# Makes the piece nodes match the state, changing only what's different: pieces that
+# moved get their node moved, captured pieces lose their node, and only new pieces
+# (like a promoted pawn) get a new node. It works for every kind of move without
+# needing to know what happened.
+func update_pieces(state: GameState, variant: ChessVariant) -> void:
+	shown_state = state
+	var on_board: Dictionary[PieceData, bool] = {}    # every piece still on the board
+
+	for square: Vector2i in state.squares:
 		var piece_data: PieceData = state.squares[square]
-		if piece_data != null:
-			add_piece(square, piece_data, variant)
+		if piece_data == null:
+			continue
+		on_board[piece_data] = true
+		if piece_nodes.has(piece_data):
+			piece_nodes[piece_data].position = square_to_position(square)    # moved, or stayed put
+		else:
+			add_piece(square, piece_data, variant)    # a new piece
+
+	# Pieces that are no longer on the board were captured: delete their nodes.
+	# (.keys() gives a copy, so erasing inside the loop is safe.)
+	for piece_data: PieceData in piece_nodes.keys():
+		if not on_board.has(piece_data):
+			piece_nodes[piece_data].queue_free()
+			piece_nodes.erase(piece_data)
 
 
 # Creates the node for one piece and puts it on its square
@@ -113,4 +139,4 @@ func add_piece(square: Vector2i, piece_data: PieceData, variant: ChessVariant) -
 	piece.position = square_to_position(square)
 	piece.scale = Vector2.ONE * piece_scale
 	$Pieces.add_child(piece)
-	piece_nodes[square] = piece
+	piece_nodes[piece_data] = piece
