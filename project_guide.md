@@ -138,15 +138,16 @@ Antialiasing softens the "staircase" pixels along diagonal and curved edges. Not
 | Part          | What it is                    | Knows about                                                                  | Never does                            |
 | ------------- | ----------------------------- | ---------------------------------------------------------------------------- | ------------------------------------- |
 | **Variant**   | a `.tres` file in `variants/` | board shape, starting layout, sides (colours, direction), which Rules to use | contain logic                         |
-| **GameState** | a plain data object           | what's on each square, whose turn it is, the move history                    | draw anything, or decide what's legal |
+| **GameState** | a plain data object           | what's on each square, whose turn it is, every piece by id, the move history | draw anything, or decide what's legal |
 | **Rules**     | a script in `scripts/rules/`  | how pieces move, what's legal, what a move does, when the game ends          | touch nodes or sprites                |
 | **View**      | Board, piece scenes, input    | drawing, clicks, animation                                                   | decide rules (it asks Rules)          |
 
 `main.gd` connects them. It loads a variant, builds the GameState from the variant's layout and tells the view to show it.
 
-**Two dictionaries, two jobs:**
-- `GameState.squares` (`Vector2i` → `PieceData`) is the game itself. The rules read and change it, and can copy it to test a move without anything changing on screen.
+**Three dictionaries, three jobs:**
+- `GameState.squares` (`Vector2i` → `PieceData`) is the game itself. The rules read and change it, and can try a move and undo it (for check detection) without anything changing on screen.
 - `Board.piece_nodes` (`PieceData` → `Piece` node) only tracks which node shows which piece. It never decides anything. The key is the piece's **PieceData object**: `apply_move` moves that same object to its new square, so the board can find its node wherever the piece goes.
+- `GameState.pieces_by_id` (`int` → `PieceData`) holds every piece made in the game, captured ones included. Undo uses it to find the original object for a recorded copy, so the board keeps the same node.
 
 **How the screen follows the state:**
 - **After a move: `Board.update_pieces(state, variant)`.** It goes through the state: a piece that already has a node gets its node moved to its square, a piece without a node gets a new one (e.g. a promoted pawn), and nodes whose piece is no longer on the board (captured) are deleted. It never needs to know *what* happened, so castling, en passant, promotion, atomic explosions and future variants need no extra screen code, and the screen can't drift from the game. A normal move creates no nodes at all.
@@ -166,13 +167,21 @@ How the record is made (my idea: **compare before and after**), so it's correct 
 - It also catches changes that don't touch `squares` at all (a rule that flips `has_moved`, or a variant where a captured piece switches sides), which a "log every square change" function would miss.
 - **Undo** writes the "before" values back. Write them *into the original PieceData objects* rather than putting the copies on the board, so the board's identity-matching still finds the existing nodes (no new nodes, stays ~0.1 ms).
 - Only played moves get a record. Check detection can use the same snapshot/compare/undo to test moves: about 30 to 40 test moves per click, each well under a millisecond.
-- **Pieces get an `id`** (unique per game: given in `load_layout`, and new pieces like a promoted queen get the next number). Copies keep the id, so a record can tell "knight 7 moved from b1 to c3" apart from "a pawn vanished and a queen appeared", undo can find the original object to write the values back into, and saved files can name pieces.
+- **Pieces get an `id`** (unique per game: given by `GameState.create_piece`, which `load_layout` uses, and new pieces like a promoted queen must be made with it too). Copies keep the id, so a record can tell "knight 7 moved from b1 to c3" apart from "a pawn vanished and a queen appeared", undo can find the original object to write the values back into, and saved files can name pieces.
 - **Copy each piece, not just the dictionary.** `squares.duplicate()`, even `duplicate(true)`, copies the dictionary but *not* the objects inside it: both dictionaries would point to the same PieceData objects.
 - **The snapshot covers the whole GameState except the history:** squares, turn, and anything added later that isn't on a square (e.g. castling rights, if those ever get stored there).
 - **Comparing:** a square goes into the record if its piece is a different one (different id, or null on one side) or the same one with any field changed. PieceData gets an `equals()` that checks every field automatically, like `copy()`.
-- **Undo and redo:** keep a position in the history instead of deleting records. Back = write the "before" values of the records in reverse order, forward = write the "after" values. A new move played after stepping back drops the records after that position (like undo in any editor).
+- **Undo and redo:** keep a position in the history instead of deleting records. Back = write the "before" values (newest move first; inside one move each square appears only once, so the order there doesn't matter), forward = write the "after" values. A new move played after stepping back drops the records after that position (like undo in any editor).
 - **Rewatching never runs the rules:** it only writes the recorded values. If the file says a pawn reached the last row and stayed a pawn, that's what is shown.
 - Replaying from the start stays possible (it's fast: only `apply_move` runs, no move checking), but it isn't needed for undo.
+
+**Move history in the code (built 17 Nov):**
+- **`state.play_move(rules, move)` plays a move.** It drops any undone moves, takes a snapshot (`take_snapshot()`, a `GameState.Snapshot` with copies of every piece and the turn), lets `rules.apply_move` change the state, then fills in the Move's record: `move.changes` (an `Array[SquareChange]`, each with `square`, `before` and `after` copies; `null` = empty) and `move.turn_before` / `move.turn_after`.
+- **Always play moves through `play_move`.** Calling `rules.apply_move` directly changes the board without a record, so that move can't be undone.
+- **`state.undo()` / `state.redo()`** write a move's `before` / `after` copies back with `_put_piece`, which finds the original object in `pieces_by_id` and copies the values into it (`copy_from`). `can_undo()` / `can_redo()` say whether there's anything to go back or forward to (later: grey out the buttons).
+- **`state.create_piece(type, side)`** makes every piece and gives it the next id. A piece made with `PieceData.new()` during a game has no id, and undo reports "No piece with id -1".
+- **`PieceData.copy()`, `copy_from()` and `equals()`** go through `_field_names()`, which asks Godot for every `var` the script declares (`get_property_list()`, keeping the ones marked `PROPERTY_USAGE_SCRIPT_VARIABLE`). A new variable in PieceData is copied and compared without changing them.
+- If a move ever adds or removes board squares (not just pieces), `_find_changes` reports an error: the record only covers what's *on* the squares.
 
 **Saving games to disk (later, after menus). Ideas from 17 Nov:**
 - **In memory and on disk are separate choices.** In memory the history always keeps the change records (undo, rewatching, check detection need them). The file format is decided separately.
@@ -186,16 +195,18 @@ How the record is made (my idea: **compare before and after**), so it's correct 
   - **Rules:** rewatching doesn't need them (it writes recorded values). Continuing an old unfinished game does, and then it uses the rules installed in the game. **Never load script code from a game file:** a shared file could contain anything, and running it would be a security risk. Store the rules' *name and version* for information, not the code.
 - **Future uses of the history:** the standard draw rules (threefold repetition, the 50-move rule) look back through it.
 
-**Data objects in Godot:** a `Node` lives in the scene (draws, gets input). A `Resource` is data saved as a file and edited in the Inspector (`ChessVariant`, `Side`). A `RefCounted` is plain data that only exists while the game runs and is deleted automatically when nothing uses it (`GameState`, `PieceData`, later `Move`).
+**Data objects in Godot:** a `Node` lives in the scene (draws, gets input). A `Resource` is data saved as a file and edited in the Inspector (`ChessVariant`, `Side`). A `RefCounted` is plain data that only exists while the game runs and is deleted automatically when nothing uses it (`GameState`, `PieceData`, `Move`, `SquareChange`).
 
 **A click from start to finish:**
 
 1. The **Board** turns the click or tap into a square (`position_to_square`) and sends its `square_clicked` signal. It decides nothing itself.
 2. **`main.gd`** receives it (`_on_square_clicked`) and does one of three things:
-   - a move of the selected piece goes to that square: `rules.apply_move(state, move)`, deselect, then `board.show_state(...)`
+   - a move of the selected piece goes to that square: `state.play_move(rules, move)` (the rules play it, the state records it), deselect, then `board.update_pieces(...)`
    - it's one of the current player's pieces: `rules.get_legal_moves(state, square)`, then `board.show_moves(...)` (selected square tinted, dots on empty targets, tinted squares for captures)
    - anything else: deselect (`board.clear_moves()`)
 3. Later: after each move, `rules.get_winner(state)` checks whether the game is over.
+
+The **Undo** and **Redo** buttons do the same as a move, the other way round: `state.undo()` / `state.redo()`, deselect, `board.update_pieces(...)`.
 
 ### Rules are small functions that can be overridden
 
@@ -217,16 +228,16 @@ Planned functions. Names can change while building, but each function keeps one 
 | `get_piece_moves(state, square)` | where a piece could go, ignoring check | the movement patterns below                    |
 | `is_move_legal(state, move)`     | removes forbidden moves                | you can't leave your own king in check         |
 | `get_legal_moves(state, square)` | the two above combined                 | usually not overridden                         |
-| `apply_move(state, move)`        | changes the state                      | move, capture, castling, en passant, promotion |
+| `apply_move(state, move)`        | changes the state (via `play_move`)    | move, capture, castling, en passant, promotion |
 | `on_capture(state, move)`        | extra effects of a capture             | nothing                                        |
 | `get_next_side(state)`           | whose turn is next                     | the other player                               |
 | `get_winner(state)`              | is the game over, and who won?         | checkmate wins, stalemate is a draw            |
 
-- **Rules never store the game.** Every function receives the state as a parameter. That lets the rules try a move on a _copy_ of the state, which is how check detection works.
+- **Rules never store the game.** Every function receives the state as a parameter. That lets check detection try a move and undo it (with the change records) without the real game or the screen changing.
 - Rules extend `Resource`, so they can have **settings** (`@export` variables) that each variant sets in the Inspector, for example `@export var explosion_radius := 1`.
 - **Each variant picks its rules in the Inspector:** ChessVariant → Rules → *New Rules* (standard chess). A variant with changed rules picks its own class instead, e.g. *New AtomicRules*. `main.gd` won't start a game whose variant has no Rules set.
-- **Movement helpers** in `rules.gd`: `_slide_moves(state, from, directions)` (rook, bishop, queen: keep going until the edge or a piece) and `_step_moves(state, from, steps)` (king, knight: one step or jump each). Direction lists are constants: `STRAIGHT`, `DIAGONAL`, `ALL_DIRECTIONS`.
-- A **Move** (`scripts/move.gd`, RefCounted) holds `from` and `to`, and later the extras for special moves.
+- **Movement helpers** in `rules.gd`: `_slide_moves(state, from, directions)` (rook, bishop, queen, pawn forward: keep going until the edge, a piece, or an optional `max_distance`) and `_step_moves(state, from, steps)` (king, knight, pawn capture: one step or jump each). Both take an optional `capture_rule` (`CaptureRule.MOVE_OR_CAPTURE` by default, `MOVE_ONLY`, `CAPTURE_ONLY`), and both ask `_can_land(piece, other, capture_rule)` whether a piece may end on a square, so the capture rules live in one place. Direction lists are constants: `STRAIGHT`, `DIAGONAL`, `ALL_DIRECTIONS`, `KNIGHT_JUMPS`, `PAWN_MOVES`, `PAWN_CAPTURE`.
+- A **Move** (`scripts/move.gd`, RefCounted) holds `from` and `to`, later the extras for special moves, and once played its change record (`changes`, `turn_before`, `turn_after`; see Move history).
 - `GameState.side_count` (from the variant) is used for whose turn is next: `(turn + 1) % side_count`.
 
 **Movement patterns.** Most pieces are a list of directions plus whether they slide:
@@ -326,12 +337,14 @@ Piece letters use standard chess notation: **K** king, **Q** queen, **R** rook, 
   1. GameState: board as a Dictionary (`Vector2i` → piece data, `null` = empty, missing = not on the board), whose turn it is. Layout reading moves out of `main.gd`; the board shows pieces from the state. No visible change.
   2. **Done:** moves for the rook, bishop, queen and king (ignoring check), tap/click to select, dots and capture tints, tap to move. Rules set in `standard.tres`; test variants `test_no_pawns.tres` and `test_only_knight.tres`. Piece type names are constants in `scripts/config/piece_names.gd` (`PieceNames.ROOK`, ...).
      - **Lag between moves: fixed (16 Nov).** `Board.update_pieces` (sync by PieceData) takes ~0.1 to 0.2 ms per move instead of ~125 ms. Also added: `GameState.history` and a Refresh button (with its own vector icon). `history.clear()` added to `load_layout`; timing prints removed.
-  3. **Knight: done** (`KNIGHT_JUMPS` + `_step_moves`). **Pawn: in progress** (my turn: forward only, double first move, diagonal capture, en passant; promotion after). Notes from the 17 Nov review:
+  3. **Knight: done** (`KNIGHT_JUMPS` + `_step_moves`). **Pawn: forward move, double first move and diagonal capture done for white** (17 Nov; Claude wrote `CaptureRule` and `max_distance` on request). Still to do: **the direction for every other side (my turn)**, then en passant and promotion. Until then black pawns look stuck: they try to move up into their own back row. Notes from the 17 Nov review:
      - "Forward" depends on the side (`Side.forward`), so `PAWN_MOVES = [Vector2i.UP]` only works for white. The rules only get the state, so the state needs the sides (e.g. `GameState.sides`, set in `load_layout`). For the diagonals: forward plus one step to each side, and for a sideways-moving pawn (4-player) "each side" is different, so work it out from `forward`.
-     - A `can_capture` bool isn't enough: pawns need three cases (move or capture / move only / capture only). A real `enum CaptureRule` fits, with a default parameter value so existing calls don't change.
-     - The double first move is a slide with a maximum distance (blocked by pieces, no capture), so give `_slide_moves` a `max_distance` instead of a new `_numbered_moves` function. **Chained jumps** (my idea: a knight jumps again *from where it landed*, e.g. up-left then down-left = two squares left) are different from a slide: a helper like `_chained_step_moves(..., max_jumps)` in the base Rules class would be a toolbox function for variants. Standard chess uses one jump. Things to handle: never land on your own pieces, a capture ends the chain (could become a CaptureRule option later), and one square reachable by two paths is still one Move (check for duplicates). The starting square is blocked by the own-piece check automatically, as long as the search only *reads* the state and never moves the knight while looking.
+     - **Done:** a `can_capture` bool wasn't enough (pawns need three cases: move or capture / move only / capture only), so `rules.gd` has `enum CaptureRule { MOVE_OR_CAPTURE, MOVE_ONLY, CAPTURE_ONLY }` as a default parameter, and existing calls didn't change. The shared check `_can_land` is my idea from the old draft comment: one function that both helpers call.
+     - **Done:** the double first move is a slide with a maximum distance (blocked by pieces, no capture): `_slide_moves(..., CaptureRule.MOVE_ONLY, max_steps)`. `_numbered_moves_can_capture` was removed. **Chained jumps** (my idea: a knight jumps again *from where it landed*, e.g. up-left then down-left = two squares left) are different from a slide: a helper like `_chained_step_moves(..., max_jumps)` in the base Rules class would be a toolbox function for variants. **Not written yet:** it comes with the double-jump knight variant, because nothing in standard chess calls it, so F5 couldn't test it. Things to handle: never land on your own pieces, a capture ends the chain (could become a CaptureRule option later), and one square reachable by two paths is still one Move (check for duplicates). The starting square is blocked by the own-piece check automatically, as long as the search only *reads* the state and never moves the knight while looking.
      - En passant: the captured pawn isn't on the square you move to, so `apply_move` needs to know which square to clear. The Move generator can say which square the captured pawn is on; the change record (see Move history) then logs the removal like any other change.
-  3b. **Change records + undo** (after the pawn, before check): snapshot before / compare after with full PieceData copies (`PieceData.copy()`), `undo_move` writing the before values back into the original objects. Check detection can then test moves by applying and undoing them.
+  3b. **Change records + undo/redo: written 17 Nov** (Claude wrote it on request, in its own commit). `PieceData`: `id`, `copy()`, `copy_from()`, `equals()`. New `scripts/square_change.gd`. `Move`: `changes`, `turn_before`, `turn_after` (replacing my draft `deleted` / `all_piece_moves` fields). `GameState`: `pieces_by_id`, `create_piece()`, `play_move()`, `undo()`, `redo()`, `history_position`; `load_layout` also resets `turn`. `apply_move` no longer adds to the history. `main.gd`: plays moves with `state.play_move`, plus `_on_undo_button_pressed` / `_on_redo_button_pressed`.
+     - [ ] Add the Undo and Redo buttons in `main.tscn` (editor) and connect their `pressed` signals
+     - [ ] Test with F5: play a few moves and captures (pawns too, for `has_moved`: an undone first move gets its double step back), undo back to the start, redo to the end, then undo and play a *different* move (redo should then do nothing). Refresh should never change what's shown.
   4. Check: "is this square attacked by side X?" + throw away moves that leave your own king attacked
   5. Castling (my turn to try), promotion, checkmate and stalemate
 - [ ] Real art: king, rook, pawn, bishop and knight done. Queen in progress
@@ -380,7 +393,7 @@ Things that tripped me up, so I don't repeat them.
   - **Decision:** keep the vector pieces. Their cost only shows when the game starts (~125 ms once, fine while loading) and for a new piece (~4 ms).
   - Errors in editor runs are slow too (each is logged with a trace and sent to the editor). If an error repeats on every move, fix it, because it adds time.
   - **Experiments go in uncommitted changes** and are undone with GitHub Desktop → Changes → right-click → Discard changes.
-- **Where a real `enum` fits:** options *inside the code* that never come from files or data, like `enum CaptureRule { MOVE_OR_CAPTURE, MOVE_ONLY, CAPTURE_ONLY }`. Piece names are text from data, so they're constants instead.
+- **Where a real `enum` fits:** options *inside the code* that never come from files or data, like `enum CaptureRule { MOVE_OR_CAPTURE, MOVE_ONLY, CAPTURE_ONLY }` in `rules.gd`. Piece names are text from data, so they're constants instead. An enum can be a parameter type (`capture_rule: CaptureRule`), and a Rules script that extends `Rules` can use `CaptureRule` too.
 - **Default parameter values:** `func f(a: int, mode := CaptureRule.MOVE_OR_CAPTURE)` lets callers leave `mode` out, so adding a parameter doesn't mean changing every existing call.
 - **`append` vs `append_array`:** `append` adds one item; to add every item of another array, use `append_array`. (Appending an `Array[Move]` into an `Array[Move]` is an error.)
 - **Lambdas** (`func(x): ...`) are for passing *behaviour* to something else, like `find_custom`. When you just need a value, compute it first: `var max_steps := 1 if piece.has_moved else 2`.
