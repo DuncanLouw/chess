@@ -6,12 +6,14 @@ extends RefCounted
 var from: Vector2i
 var to: Vector2i
 
-# include the one that got captured by being palced on so it can be undone when rewatching or undoing moves
-# will be more than one in something like atomic chess
-var deleted: Dictionary[Vector2i, PieceData] = {} 
-
-# vetor4i I imagine as 2 Vector2i's for a from and a to as well as the piece's data that moved
-var all_piece_moves: Dictionary[Vector4i, PieceData] = {}
+# The change record, filled in by GameState.play_move() once the move is played.
+# `changes` has one entry per square the move changed: a normal move gives two
+# (the square it left and the square it landed on, with any captured piece as that
+# square's "before"); castling, en passant or an atomic explosion give more.
+# Undo and redo only use this record, so they never run the rules.
+var changes: Array[SquareChange] = []
+var turn_before := 0
+var turn_after := 0
 
 
 func _init(from_square: Vector2i, to_square: Vector2i) -> void:

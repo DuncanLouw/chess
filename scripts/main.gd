@@ -24,7 +24,7 @@ func _on_board_square_clicked(square: Vector2i) -> void:
 	# 1. One of the selected piece's moves goes to this square: play it
 	for move in legal_moves:
 		if move.to == square:
-			rules.apply_move(state, move)
+			state.play_move(rules, move)    # the rules play it, the state records it for undo
 			_deselect()
 			board.update_pieces(state, variant)
 			return
@@ -49,3 +49,17 @@ func _deselect() -> void:
 func _on_refresh_button_pressed() -> void:
 	_deselect()
 	board.show_state(state, variant)
+
+
+# The Undo button: takes back the last move (does nothing if there's none)
+func _on_undo_button_pressed() -> void:
+	state.undo()
+	_deselect()
+	board.update_pieces(state, variant)
+
+
+# The Redo button: plays the last undone move again (does nothing if there's none)
+func _on_redo_button_pressed() -> void:
+	state.redo()
+	_deselect()
+	board.update_pieces(state, variant)
