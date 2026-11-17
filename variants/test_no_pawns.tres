@@ -10,12 +10,12 @@ metadata/_custom_type_script = "uid://bs82nmtylf5v4"
 
 [sub_resource type="Resource" id="Resource_ldt34"]
 script = ExtResource("3_xmel0")
-forward = Vector2i(0, 1)
 metadata/_custom_type_script = "uid://ba1upaondn2ys"
 
 [sub_resource type="Resource" id="Resource_m55oj"]
 script = ExtResource("3_xmel0")
 letter = "b"
+forward = Vector2i(0, 1)
 fill_color = Color(0, 0, 0, 1)
 outline_color = Color(1, 1, 1, 1)
 metadata/_custom_type_script = "uid://ba1upaondn2ys"
@@ -23,6 +23,7 @@ metadata/_custom_type_script = "uid://ba1upaondn2ys"
 [resource]
 script = ExtResource("2_2i1hu")
 rules = SubResource("Resource_qamoo")
+display_name = "No Pawns"
 sides = Array[ExtResource("3_xmel0")]([SubResource("Resource_ldt34"), SubResource("Resource_m55oj")])
 layout = "bR bN bB bQ bK bB bN bR
 .. .. .. .. .. .. .. ..

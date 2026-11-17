@@ -9,7 +9,8 @@ const STRAIGHT = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
 const DIAGONAL = [Vector2i(1, 1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(-1, -1)]
 const ALL_DIRECTIONS = STRAIGHT + DIAGONAL
 const KNIGHT_JUMPS = [Vector2i(1,2), Vector2i(1,-2), Vector2i(-1,2), Vector2i(-1,-2), Vector2i(2,1), Vector2i(2,-1), Vector2i(-2,1), Vector2i(-2,-1)]
-#const PAWN_move = 
+const PAWN_MOVES = [Vector2i.UP]
+const PAWN_CAPTURE = [Vector2i(1,1), Vector2i(-1,1)]
 
 # Where the piece on `from` could move, ignoring check (check comes in a later step)
 func get_piece_moves(state: GameState, from: Vector2i) -> Array[Move]:
@@ -19,17 +20,19 @@ func get_piece_moves(state: GameState, from: Vector2i) -> Array[Move]:
 		return moves
 	match piece.type:
 		PieceNames.ROOK:
-			moves = _slide_moves(state, from, STRAIGHT)
+			moves = _slide_moves(state, from, STRAIGHT, true)
 		PieceNames.BISHOP:
-			moves = _slide_moves(state, from, DIAGONAL)
+			moves = _slide_moves(state, from, DIAGONAL, true)
 		PieceNames.QUEEN:
-			moves = _slide_moves(state, from, ALL_DIRECTIONS)
+			moves = _slide_moves(state, from, ALL_DIRECTIONS, true)
 		PieceNames.KING:
-			moves = _step_moves(state, from, ALL_DIRECTIONS)
+			moves = _step_moves(state, from, ALL_DIRECTIONS, true)
 		PieceNames.KNIGHT:
-			moves = _step_moves(state, from, KNIGHT_JUMPS)
-		#PieceNames.PAWN:
-			#moves = _step_moves(state, from, ALL_DIRECTIONS)
+			moves = _step_moves(state, from, KNIGHT_JUMPS, true)
+		PieceNames.PAWN:
+			moves = _step_moves(state, from, PAWN_CAPTURE, true)
+			var max_steps := 1 if piece.has_moved else 2
+			moves.append_array(_numbered_moves_can_capture(state, from, PAWN_MOVES, false, max_steps))
 	return moves
 
 
@@ -57,7 +60,7 @@ func get_next_side(state: GameState) -> int:
 
 # Rook, bishop, queen: keep going in each direction until the edge of the board
 # or a piece. An enemy piece can be captured; any piece stops the slide.
-func _slide_moves(state: GameState, from: Vector2i, directions: Array) -> Array[Move]:
+func _slide_moves(state: GameState, from: Vector2i, directions: Array, can_capture: bool) -> Array[Move]:
 	var moves: Array[Move] = []
 	var piece: PieceData = state.squares[from]
 	for direction: Vector2i in directions:
@@ -67,7 +70,7 @@ func _slide_moves(state: GameState, from: Vector2i, directions: Array) -> Array[
 			if other == null:
 				moves.append(Move.new(from, target))
 			else:
-				if other.side != piece.side:
+				if other.side != piece.side and can_capture:
 					moves.append(Move.new(from, target))    # a capture
 				break    # any piece blocks the rest of this direction
 			target += direction
@@ -76,7 +79,7 @@ func _slide_moves(state: GameState, from: Vector2i, directions: Array) -> Array[
 
 # King (and soon the knight): one step or jump in each direction, if that
 # square is on the board and not taken by your own piece
-func _step_moves(state: GameState, from: Vector2i, steps: Array) -> Array[Move]:
+func _step_moves(state: GameState, from: Vector2i, steps: Array, can_capture: bool) -> Array[Move]:
 	var moves: Array[Move] = []
 	var piece: PieceData = state.squares[from]
 	for step: Vector2i in steps:
@@ -84,6 +87,24 @@ func _step_moves(state: GameState, from: Vector2i, steps: Array) -> Array[Move]:
 		if not state.squares.has(target):
 			continue    # off the board
 		var other: PieceData = state.squares[target]
-		if other == null or other.side != piece.side:
+		if other == null or (other.side != piece.side and can_capture):
 			moves.append(Move.new(from, target))
+	return moves
+
+
+# allows the pawn to move two and, for example knight to jump multiple times
+# diffrent from slide it allows all moves again from the new spot
+func _numbered_moves_can_capture(
+	state: GameState,
+	from: Vector2i,
+	steps: Array,
+	can_capture: bool,
+	number_of_moves: int
+) -> Array[Move]:
+	var moves: Array[Move] = []
+	var piece: PieceData = state.squares[from]
+	for step: Vector2i in steps:
+		var target := from + direction
+		for i in number_of_moves:
+			# either I make this part similar to _step_moves, or I split _step_moves into two functions and then have both call that function. Could also just use this one and input 1 as the step input for king and pawn capture
 	return moves
