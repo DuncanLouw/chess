@@ -15,12 +15,12 @@ enum CaptureRule {
 const UNLIMITED := -1
 
 # Vector2i.UP is (0, -1), because y goes down the screen
+# Every pattern here is written from white's point of view (forward = up).
+# _slide_moves and _step_moves turn it to face each piece's side (align_to_forward).
 const STRAIGHT = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
 const DIAGONAL = [Vector2i(1, 1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(-1, -1)]
 const ALL_DIRECTIONS = STRAIGHT + DIAGONAL
 const KNIGHT_JUMPS = [Vector2i(1,2), Vector2i(1,-2), Vector2i(-1,2), Vector2i(-1,-2), Vector2i(2,1), Vector2i(2,-1), Vector2i(-2,1), Vector2i(-2,-1)]
-# Pawns: only right for white so far (forward = up). Other sides need their own
-# forward direction (Side.forward).
 const PAWN_MOVES = [Vector2i.UP]
 const PAWN_CAPTURE = [Vector2i(1,-1), Vector2i(-1,-1)]
 
@@ -84,8 +84,10 @@ func _slide_moves(
 ) -> Array[Move]:
 	var moves: Array[Move] = []
 	var piece: PieceData = state.squares[from]
+	var forward: Vector2i = state.sides[piece.side].forward
 	for direction: Vector2i in directions:
-		var target := from + direction
+		var new_direction := align_to_forward(direction, forward)
+		var target := from + new_direction
 		var distance := 1
 		while state.squares.has(target):    # false once we're off the board
 			var other: PieceData = state.squares[target]
@@ -93,7 +95,7 @@ func _slide_moves(
 				moves.append(Move.new(from, target))
 			if other != null or distance == max_distance:
 				break    # a piece blocks the rest of this direction, or it has gone far enough
-			target += direction
+			target += new_direction
 			distance += 1
 	return moves
 
@@ -108,8 +110,9 @@ func _step_moves(
 ) -> Array[Move]:
 	var moves: Array[Move] = []
 	var piece: PieceData = state.squares[from]
+	var forward: Vector2i = state.sides[piece.side].forward
 	for step: Vector2i in steps:
-		var target := from + step
+		var target := from + align_to_forward(step, forward)
 		if state.squares.has(target) and _can_land(piece, state.squares[target], capture_rule):
 			moves.append(Move.new(from, target))
 	return moves
@@ -121,3 +124,10 @@ func _can_land(piece: PieceData, other: PieceData, capture_rule: CaptureRule) ->
 	if other == null:
 		return capture_rule != CaptureRule.CAPTURE_ONLY
 	return other.side != piece.side and capture_rule != CaptureRule.MOVE_ONLY
+
+# Turns a pattern written for white (forward = up) to face `forward`:
+# a quarter turn for a side moving left or right, a half turn for one moving down
+func align_to_forward(vec: Vector2i, forward: Vector2i) -> Vector2i:
+	var new_x := -vec.x * forward.y - vec.y * forward.x
+	var new_y := vec.x * forward.x - vec.y * forward.y
+	return Vector2i(new_x, new_y)

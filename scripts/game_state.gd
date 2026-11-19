@@ -12,6 +12,9 @@ var turn := 0
 # How many sides take turns (2 in standard chess)
 var side_count := 0
 
+# The variant's sides, so the rules can read things like a side's forward direction
+var sides: Array[Side] = []
+
 # Every piece made in this game, by id, including captured ones, so undo and redo
 # can find the original object again. Pieces are only made with create_piece().
 var pieces_by_id: Dictionary[int, PieceData] = {}
@@ -42,6 +45,7 @@ func load_layout(variant: ChessVariant) -> void:
 	pieces_by_id.clear()
 	next_piece_id = 0
 	side_count = variant.sides.size()
+	sides = variant.sides
 	var rows: Array = variant.layout.strip_edges().split("\n", false)
 	for row_num in range(len(rows)):
 		var codes: Array = rows[row_num].split(" ", false)
